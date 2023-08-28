@@ -219,14 +219,6 @@ UtilityWindow:Button({
 	end
 })
 
-BlatantWindow:Button({
-	["Name"] = "MassReport",
-	["Callback"] = function()
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/MassReport.lua", true))()
-	end,
-	["Description"] = "MassReporting everyone"
-})
-
 local SelectTeam = UtilityWindow:Dropdown({
 	["Name"] = "SelectTeam",
 	["StartingText"] = "Select Team...",
