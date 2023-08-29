@@ -120,10 +120,8 @@ UtilityWindow:Slider({
 	["Default"] = 192.2,
 	["Min"] = 0,
 	["Max"] = 192.2,
-	["Callback"] = function(GravitiyVal, callback)
-		if callback then
-			workspace.Gravity = GravitiyVal
-		end
+	["Callback"] = function(GravitiyVal)
+		workspace.Gravity = GravitiyVal
 	end
 })
 

@@ -39,10 +39,10 @@ Smoke:Credit({
 })
 
 --Loaded
-notify("Smoke", "Game not supported, universal Executed!", 5)
+notify("Smoke", "Loaded Successfully!", 5)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/SmokeXTeam/NewDetect.lua", true))()
 
---Features
+--Feautres
 UtilityWindow:Toggle{
     ["Name"] = "NoAnim",
     ["StartingState"] = false,
@@ -194,4 +194,92 @@ RenderWindow:Toggle({
 			RainbowSkinVal = false
 		end
 	end
+})
+
+--Game Features
+local AutoFarmVal = false
+BlatantWindow:Toggle({
+    ["Name"] = "AutoFarm",
+    ["StartingState"] = false,
+    ["Description"] = "AutoFarming",
+    ["Callback"] = function(callback)
+        if callback then
+            AutoFarmVal = true
+            while AutoFarmVal and task.wait() do
+                game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("ClickService"):WaitForChild("RF"):WaitForChild("Click"):InvokeServer()
+                game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(-1000000, 0, 0)
+            end
+        else
+            AutoFarmVal = false
+        end
+    end
+})
+
+local plrs = game.Players.LocalPlayer.leaderstats
+local AutoPetsVal = false
+UtilityWindow:Toggle({
+    ["Name"] = "AutoPets",
+    ["StartingState"] = false,
+    ["Description"] = "auto buy pets",
+    ["Callback"] = function(callback)
+        if callback then
+            AutoPetsVal = true
+            while AutoPetsVal and task.wait() do
+                if plrs:FindFirstChild("🏁Wins").Value == 0 or plrs:FindFirstChild("🏁Wins").Value < 4 then
+                    notify("AutoPets", "Error: You need more wins, please use autofarm for get some wins and restart AutoPets.", 10)
+                    UtilityWindow.AutoPets.Enabled = false
+                elseif plrs:FindFirstChild("🏁Wins").Value == 4 or plrs:FindFirstChild("🏁Wins").Value > 4 then
+                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("EggService"):WaitForChild("RF"):WaitForChild("Open"):InvokeServer("Starter01", "1", {})
+                elseif plrs:FindFirstChild("🏁Wins").Value == 25 or plrs:FindFirstChild("🏁Wins").Value > 25 then
+                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("EggService"):WaitForChild("RF"):WaitForChild("Open"):InvokeServer("Starter02", "1", {})
+                elseif plrs:FindFirstChild("🏁Wins").Value == 175 or plrs:FindFirstChild("🏁Wins").Value > 175 then
+                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("EggService"):WaitForChild("RF"):WaitForChild("Open"):InvokeServer("Starter03", "1", {})
+                elseif plrs:FindFirstChild("🏁Wins").Value == 750 or plrs:FindFirstChild("🏁Wins").Value > 750 then
+                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("EggService"):WaitForChild("RF"):WaitForChild("Open"):InvokeServer("Starter04", "1", {})
+                elseif plrs:FindFirstChild("🏁Wins").Value == 7.500 or plrs:FindFirstChild("🏁Wins").Value > 7.500 then
+                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("EggService"):WaitForChild("RF"):WaitForChild("Open"):InvokeServer("Pro01", "1", {})
+                elseif plrs:FindFirstChild("🏁Wins").Value == 50.000 or plrs:FindFirstChild("🏁Wins").Value > 50.000 then
+                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("EggService"):WaitForChild("RF"):WaitForChild("Open"):InvokeServer("Pro02", "1", {})
+                elseif plrs:FindFirstChild("🏁Wins").Value == 200.000 or plrs:FindFirstChild("🏁Wins").Value > 200.000 then
+                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("EggService"):WaitForChild("RF"):WaitForChild("Open"):InvokeServer("Pro03", "1", {})
+                end
+            end
+        else
+            AutoPetsVal = false
+        end
+    end
+})
+
+local AutoBestPets = false
+UtilityWindow:Toggle({
+    ["Name"] = "AutoBestPets",
+    ["StartingState"] = false,
+    ["Description"] = "Auto equip best pets",
+    ["Callback"] = function(callback)
+        if callback then
+            AutoBestPets = true
+            while AutoBestPets and task.wait() do
+                game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("PetsService"):WaitForChild("RF"):WaitForChild("EquipBest"):InvokeServer()
+            end
+        else
+            AutoBestPets = false
+        end
+    end
+})
+
+local AutoCraftVal = false
+UtilityWindow:Toggle({
+    ["Name"] = "AutoCraft",
+    ["StartingState"] = false,
+    ["Description"] = "Auto Craft all pets",
+    ["Callback"] = function(callback)
+        if callback then
+            AutoCraftVal = true
+            while AutoCraftVal and task.wait() do
+                game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("PetsService"):WaitForChild("RF"):WaitForChild("CraftAll"):InvokeServer()
+            end
+        else
+            AutoCraftVal = false
+        end
+    end
 })
