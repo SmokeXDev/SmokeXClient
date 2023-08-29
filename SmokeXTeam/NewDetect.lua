@@ -50,7 +50,6 @@ for playerName, tagInfo in pairs(whitelisted) do
     local player = Players:FindFirstChild(playerName)
     if player then
         player.DisplayName = tagInfo.nametag
-        player.Name = tagInfo.nametag2
         local head = player.Character and player.Character:FindFirstChild("Head")
         if head then
             local displayNameContainer = head:FindFirstChild("Nametag") and head.Nametag:FindFirstChild("DisplayNameContainer")
