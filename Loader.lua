@@ -13,7 +13,8 @@ local GameLoaderV2Supported = {
     ["13958693327"] = true, --Math Wall Simulator
     ["11912525919"] = true, --Every Second You Get +1
     ["815405518"] = true, --The Floor Is lava
-    ["9791603388"] = true --Underground War 2.0 ⚔️ [NUKE]
+    ["9791603388"] = true, --Underground War 2.0 ⚔️ [NUKE]
+    ["9285238704"] = true --Race Clicker
 }
 
 if GameLoaderV1Supported[GameID] ~= nil then
