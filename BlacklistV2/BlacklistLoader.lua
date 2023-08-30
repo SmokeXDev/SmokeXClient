@@ -3,7 +3,7 @@ local plr = game:GetService("Players").LocalPlayer
 local Humanoid = game.Players.LocalPlayer.Character.HumanoidRootPart
 local Set = 9e9
 
-local bodyy = http_request({Url = "https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/BlacklistV2/BlacklistUsers.json", Method = 'GET'}).Body;
+local bodyy = http_request({Url = "https://raw.githubusercontent.com/SmokeXDev/SmokeUsers/main/Blacklist.json", Method = 'GET'}).Body;
 local blacklisted = game:GetService("HttpService"):JSONDecode(bodyy)
 for playerName, kickInfo in pairs(blacklisted) do
     local blacklistedplr = game:GetService("Players"):FindFirstChild(playerName)

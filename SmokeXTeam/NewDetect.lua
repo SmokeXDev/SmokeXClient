@@ -1,4 +1,4 @@
-local whitelisted = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/Whitelist/main/NewWhitelist.json"))
+local whitelisted = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeUsers/main/Whitelist.json"))
 local Players = game:GetService("Players")
 local lplrname = game.Players.LocalPlayer.Name
 
