@@ -196,6 +196,72 @@ RenderWindow:Toggle({
 	end
 })
 
+local SpeedVal = {Value = 1}
+local Normal = false
+local TPSpeed = false
+local CFrame = false
+UtilityWindow:Slider({
+	["Name"] = "Speed",
+	["Default"] = 16,
+	["Min"] = 1,
+	["Max"] = 100,
+	["Callback"] = function(SpeedFunc) SpeedVal.Value = SpeedFunc end
+})
+local SpeedSelect = UtilityWindow:Dropdown({
+	["Name"] = "SpeedMode",
+	["StartingText"] = "Select Speed...",
+	["Description"] = nil,
+	["Items"] = {
+		{"Normal", 1},
+		{"TPSpeed", 2},
+		{"CFrame", 3}
+	},
+	["Callback"] = function(speedmode)
+		if speedmode == 1 then
+			TPSpeed = false
+			CFrame = false
+			Normal = true
+			while Normal and task.wait() do
+				game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = SpeedVal.Value
+			end
+		elseif speedmode == 2 then
+			notify("TPSpeed", "Default: 5")
+			SpeedVal.Value = 5
+			Normal = false
+			CFrame = false
+			TPSpeed = true
+			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+			while TPSpeed and task.wait(.5) do
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * SpeedVal.Value
+			end
+		elseif speedmode == 3 then
+			notify("CFrame", "Default: 1")
+			SpeedVal.Value = 1
+			Normal = false
+			TPSpeed = false
+			CFrame = true
+			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+			while CFrame and task.wait() do
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * SpeedVal.Value
+			end
+		else
+			Normal = false
+			TPSpeed = false
+			CFrame = false
+		end
+	end
+})
+
+UtilityWindow:Slider({
+	["Name"] = "HighJump",
+	["Default"] = 50,
+	["Min"] = 1,
+	["Max"] = 500,
+	["Callback"] = function(JumpPower)
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = JumpPower
+	end
+})
+
 --Game Features
 local AutoFarmVal = false
 BlatantWindow:Toggle({
@@ -282,4 +348,76 @@ UtilityWindow:Toggle({
             AutoCraftVal = false
         end
     end
+})
+
+local Codes = {
+	["happyanniversaryraceclicker"] = "Boost",
+	["sorryforanotherrejoin"] = "x5 Boosts",
+	["500mvisits"] = "x3 Lucky Boosts",
+	["goodupdate"] = "x3 Win Boosts",
+	["happy4thofjuly"] = "Rewards",
+	["forgiveusfornoupdate"] = "x3 Lucky Boosts + x3 Wins Boosts",
+	["freepet"] = "x3 Lucky Boosts + x3 Wins Boosts",
+	["Updateclickcode"] = "AutoClicker Boost",
+	["FREEPET1"] = "Limited Free Pet",
+	["ObbyBoost"] = "x2 Wins Boosts + x3 Wins Boosts",
+	["X3WOWCODE"] = "x3 Lucky Boosts + x3 Wins Boosts",
+	["x330min5"] = "x3 Wins Boosts",
+	["NEWCODEWIN1"] = "x3 Wins Boosts",
+	["x3upd1"] = "x3 Wins Boosts",
+	["winsop2"] = "x3 Wins Boosts",
+	["x3wincode2"] = "x3 Wins Boosts",
+	["500KLikes"] = "100 Wins",
+	["ThankYou50M"] = "25 Wins",
+	["Almost100MVisits"] = "25 Wins",
+	["1MGroupMembers"] = "15 Wins",
+	["ThanksFor5MillionsVisits"] = "8 Wins",
+	["LetsGo5KLikes"] = "6 Wins",
+	["NewUpdate"] = "3 Wins",
+	["myvalentine"] = "x3 Wins Boosts",
+	["opx3code"] = "x3 Wins Boosts"
+}
+CombatWindow:Button({
+	["Name"] = "ReedemCodes",
+	["Description"] = "Reedem all codes (Working only 1 time)",
+	["Callback"] = function()
+		for code, description in pairs(Codes) do
+			game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("CodesService"):WaitForChild("RF"):WaitForChild("Redeem"):InvokeServer(code)
+			notify(code, "You won: " .. description, 10)
+		end
+	end
+})
+
+local SeasonVal = false
+UtilityWindow:Toggle({
+	["Name"] = "SeasonRedeemer",
+	["StartingState"] = false,
+	["Description"] = "Auto reedem free rewards on the season pass",
+	["Callback"] = function(callback)
+		if callback then
+			SeasonVal = true
+			while SeasonVal and task.wait() do
+				game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("SeasonPassService"):WaitForChild("RF"):WaitForChild("ClaimTier"):InvokeServer()
+			end
+		else
+			SeasonVal = false
+		end
+	end
+})
+
+local AutoRebirth = false
+UtilityWindow:Toggle({
+	["Name"] = "AutoRebirth",
+	["StartingState"] = false,
+	["Description"] = "Auto rebirth",
+	["Callback"] = function(callback)
+		if callback then
+			AutoRebirth = true
+			while AutoRebirth and task.wait() do
+				game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("RebirthService"):WaitForChild("RF"):WaitForChild("Rebirth"):InvokeServer()
+			end
+		else
+			AutoRebirth = false
+		end
+	end
 })

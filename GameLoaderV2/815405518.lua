@@ -196,6 +196,72 @@ RenderWindow:Toggle({
 	end
 })
 
+local SpeedVal = {Value = 1}
+local Normal = false
+local TPSpeed = false
+local CFrame = false
+UtilityWindow:Slider({
+	["Name"] = "Speed",
+	["Default"] = 16,
+	["Min"] = 1,
+	["Max"] = 100,
+	["Callback"] = function(SpeedFunc) SpeedVal.Value = SpeedFunc end
+})
+local SpeedSelect = UtilityWindow:Dropdown({
+	["Name"] = "SpeedMode",
+	["StartingText"] = "Select Speed...",
+	["Description"] = nil,
+	["Items"] = {
+		{"Normal", 1},
+		{"TPSpeed", 2},
+		{"CFrame", 3}
+	},
+	["Callback"] = function(speedmode)
+		if speedmode == 1 then
+			TPSpeed = false
+			CFrame = false
+			Normal = true
+			while Normal and task.wait() do
+				game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = SpeedVal.Value
+			end
+		elseif speedmode == 2 then
+			notify("TPSpeed", "Default: 5")
+			SpeedVal.Value = 5
+			Normal = false
+			CFrame = false
+			TPSpeed = true
+			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+			while TPSpeed and task.wait(.5) do
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * SpeedVal.Value
+			end
+		elseif speedmode == 3 then
+			notify("CFrame", "Default: 1")
+			SpeedVal.Value = 1
+			Normal = false
+			TPSpeed = false
+			CFrame = true
+			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+			while CFrame and task.wait() do
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * SpeedVal.Value
+			end
+		else
+			Normal = false
+			TPSpeed = false
+			CFrame = false
+		end
+	end
+})
+
+UtilityWindow:Slider({
+	["Name"] = "HighJump",
+	["Default"] = 50,
+	["Min"] = 1,
+	["Max"] = 500,
+	["Callback"] = function(JumpPower)
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = JumpPower
+	end
+})
+
 --Game Features
 local char = game:GetService("Players").LocalPlayer.Character
 BlatantWindow:Toggle({
