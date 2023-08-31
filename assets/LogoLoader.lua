@@ -1,3 +1,7 @@
+print("No Smoke Logo has been spawned: Current Patched")
+
+--[[ Recoding
+
 if not isfolder("Smoke") then
 	makefolder("Smoke")
 end
@@ -79,3 +83,5 @@ local function VHCHIK_fake_script()
 	end)
 end
 coroutine.wrap(VHCHIK_fake_script)()
+
+]]
