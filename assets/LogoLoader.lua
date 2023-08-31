@@ -1,4 +1,9 @@
-writefile("Smoke/assets/SmokeLogo.png", game:HttpGet('https://github.com/SmokeXDev/SmokeXClient/blob/main/assets/SmokeLogo.png?raw=true'))
+if not isfile("Smoke/assets/SmokeLogo.png") then
+	writefile("Smoke/assets/SmokeLogo.png", game:HttpGet('https://github.com/SmokeXDev/SmokeXClient/blob/main/assets/SmokeLogo.png?raw=true'))
+end
+
+wait(0.5)
+
 local SmokeLogo = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local UICorner = Instance.new("UICorner")
@@ -21,7 +26,7 @@ UIGradient.Transparency = NumberSequence.new{NumberSequenceKeypoint.new(0.00, 0.
 UIGradient.Parent = Frame
 Logo.Name = "Logo"
 Logo.Parent = Frame
-Logo.Image = getcustomasset("Smoke/assets/SmokeLogo.png")
+Logo.Image = getcustomasset or getsynasset("Smoke/assets/SmokeLogo.png")
 Logo.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
 Logo.BackgroundTransparency = 0.500
 Logo.BorderColor3 = Color3.fromRGB(0, 0, 0)
