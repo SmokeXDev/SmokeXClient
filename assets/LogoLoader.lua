@@ -1,8 +1,18 @@
+if not isfolder("Smoke") then
+	makefolder("Smoke")
+end
+if not isfolder("Smoke/assets") then
+	makefolder("Smoke/assets")
+end
+
 if not isfile("Smoke/assets/SmokeLogo.png") then
 	writefile("Smoke/assets/SmokeLogo.png", game:HttpGet('https://github.com/SmokeXDev/SmokeXClient/blob/main/assets/SmokeLogo.png?raw=true'))
 end
+if not isfile("Smoke/assets/Cape.png") then
+    writefile("Smoke/assets/Cape.png", game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/assets/Cape.png"))
+end
 
-wait(0.5)
+wait(.5)
 
 local SmokeLogo = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")

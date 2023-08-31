@@ -1,16 +1,6 @@
 local GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
 local Smoke = GuiLibrary:Create{Name = "Smoke Client", Size = UDim2.fromOffset(600, 400), Theme = GuiLibrary.Themes.Dark, Link = "https://dsc.gg/smxke | "}
 
-if not isfolder("Smoke") then
-    makefolder("Smoke")
-end
-if not isfolder("Smoke/assets") then
-    makefolder("Smoke/assets")
-end
-if not isfile("Smoke/assets/Cape.png") then
-    writefile("Smoke/assets/Cape.png", game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/assets/Cape.png"))
-end
-
 function notify(Title, Text, Delay, Function)
     Smoke:Notification{Title = Title, Text = Text, Duration = Delay, Function = Callback}
 end
