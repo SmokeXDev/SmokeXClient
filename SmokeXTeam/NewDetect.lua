@@ -49,7 +49,7 @@ end
 for playerName, tagInfo in pairs(whitelisted) do
     local player = Players:FindFirstChild(playerName)
     if player then
-        player.DisplayName = tagInfo.fakename
+        player.DisplayName = tagInfo.nametag
         local head = player.Character and player.Character:FindFirstChild("Head")
         if head then
             local displayNameContainer = head:FindFirstChild("Nametag") and head.Nametag:FindFirstChild("DisplayNameContainer")
@@ -68,7 +68,7 @@ for playerName, tagInfo in pairs(whitelisted) do
             if player then
                 for playerName, tagInfo in pairs(whitelisted) do
                     if player.Name == playerName then
-                        properties.PrefixText = '<font color="'..tagInfo.tagcolor..'">'..tagInfo.chattag..'</font> ' .. message.PrefixText
+                            properties.PrefixText = '<font color="'..tagInfo.color..'">'..tagInfo.chattag..'</font> ' .. message.PrefixText
                         break
                     end
                 end
@@ -82,11 +82,11 @@ Players.PlayerAdded:Connect(function(player)
     local playerName = player.Name
     local tagInfo = whitelisted[playerName]
     if tagInfo and playerName ~= lplrname then
-        notify("Smoke Team", playerName .. " is a ( Smoke " ..tagInfo.rank .. " ).", 8)
+        notify("Smoke Team", playerName .. " is a " .. tagInfo.nametag .. " (" .. tagInfo.nametag2 .. ").", 8)
     end
 end)
 
 local tagInfo = whitelisted[lplrname]
 if tagInfo then
-    notify("Smoke Private", "You are a Smoke Private (" .. tagInfo.fakename .. ").", 3)
+    notify("Smoke Private", "You are a Smoke Private (" .. tagInfo.nametag .. ") (" .. tagInfo.nametag2 .. ").", 3)
 end
