@@ -1,5 +1,5 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/BlacklistV2/BlacklistLoader.lua", true))()
-loadstring(game:HttpGet("https://github.com/SmokeXDev/SmokeXClient/blob/main/assets/LogoLoader.lua", true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/assets/LogoLoader.lua", true))()
 
 local GameID = tostring(game.PlaceId)
 local GameLoaderV1Supported = {
