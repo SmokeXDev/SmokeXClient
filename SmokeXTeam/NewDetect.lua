@@ -49,14 +49,14 @@ end
 for playerName, tagInfo in pairs(whitelisted) do
     local player = Players:FindFirstChild(playerName)
     if player then
-        player.DisplayName = tagInfo.nametag
+        player.DisplayName = tagInfo.FakeName
         local head = player.Character and player.Character:FindFirstChild("Head")
         if head then
             local displayNameContainer = head:FindFirstChild("Nametag") and head.Nametag:FindFirstChild("DisplayNameContainer")
             if displayNameContainer then
                 local displayName = displayNameContainer:FindFirstChild("DisplayName")
                 if displayName then
-                    displayName.Text = tagInfo.headname
+                    displayName.Text = tagInfo.HeadName
                     displayName.TextColor3 = Color3.fromRGB(0xFF, 0x32, 0x32)
                 end
             end
@@ -68,7 +68,7 @@ for playerName, tagInfo in pairs(whitelisted) do
             if player then
                 for playerName, tagInfo in pairs(whitelisted) do
                     if player.Name == playerName then
-                        properties.PrefixText = '<font color="'..tagInfo.color..'">'..tagInfo.chattag..'</font> ' .. message.PrefixText
+                        properties.PrefixText = '<font color="'..tagInfo.TagColor..'">'..tagInfo.ChatTag..'</font> ' .. message.PrefixText
                         break
                     end
                 end
@@ -82,11 +82,11 @@ Players.PlayerAdded:Connect(function(player)
     local playerName = player.Name
     local tagInfo = whitelisted[playerName]
     if tagInfo and playerName ~= lplrname then
-        notify("Smoke Team", playerName .. " is a " .. tagInfo.nametag .. " (" .. tagInfo.nametag2 .. ").", 8)
+        notify("Smoke Team", playerName .. " is a ( Smoke " ..tagInfo.Rank .. " ).", 8)
     end
 end)
 
 local tagInfo = whitelisted[lplrname]
 if tagInfo then
-    notify("Smoke Private", "You are a Smoke Private (" .. tagInfo.nametag .. ") (" .. tagInfo.nametag2 .. ").", 3)
+    notify("Smoke Private", "You are a Smoke Private (" .. tagInfo.FakeName .. ").", 3)
 end
