@@ -39,19 +39,20 @@ Smoke:Credit({
 })
 
 --Loaded
-notify("Smoke", "Game not supported, universal Executed!", 5)
+notify("Smoke", "Loaded Successfully!", 5)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/SmokeXTeam/NewDetect.lua", true))()
 
---Features
+--Feautres
+local Anim = game.Players.LocalPlayer.Character.Animate
 UtilityWindow:Toggle{
     ["Name"] = "NoAnim",
     ["StartingState"] = false,
     ["Description"] = "Removes your roblox anim",
     ["Callback"] = function(callback) 
         if callback then
-            game:GetService("Players").LocalPlayer.Character.Animate.Disabled = true
+            Anim.Disabled = true
         else
-            game:GetService("Players").LocalPlayer.Character.Animate.Disabled = false
+            Anim.Disabled = false
         end
     end
 }
@@ -64,15 +65,15 @@ BlatantWindow:Button({
 	["Description"] = "MassReporting everyone"
 })
 
-local mouse = game:GetService("Players").LocalPlayer:GetMouse()
+local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
 RenderWindow:Toggle({
 	["Name"] = "Crosshair",
 	["StartingState"] = false,
 	["Callback"] = function(callback)
 		if callback then
-			mouse.Icon = "rbxassetid://9943168532"
+			Mouse.Icon = "rbxassetid://9943168532"
 		else
-			mouse.Icon = ""
+			Mouse.Icon = ""
 		end
 	end
 })
@@ -115,13 +116,42 @@ RenderWindow:Toggle({
 	end
 })
 
+local GravitiyVal = {Value = 1}
+local Normal = false
+local Velocity = false
 UtilityWindow:Slider({
-	["Name"] = "GravityV2",
+	["Name"] = "Gravity",
 	["Default"] = 192.2,
 	["Min"] = 0,
 	["Max"] = 192.2,
-	["Callback"] = function(GravitiyVal)
-		workspace.Gravity = GravitiyVal
+	["Callback"] = function(GravityFunc) GravitiyVal.Value = GravityFunc end
+})
+local GravitySelect = UtilityWindow:Dropdown({
+	["Name"] = "GravityMode",
+	["StartingText"] = "Select Gravity...",
+	["Description"] = nil,
+	["Items"] = {
+		{"Normal", 1},
+		{"Velocity", 2}
+	},
+	["Callback"] = function(gravitymode)
+		if gravitymode == 1 then
+			Velocity = false
+			Normal = true
+			while Normal and task.wait() do
+				game.workspace.Gravity = GravitiyVal.Value
+			end
+		elseif gravitymode == 2 then
+			Normal = false
+			Velocity = true
+			game.workspace.Gravity = 192.2
+			while Velocity and task.wait(.2) do
+				game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0, GravitiyVal.Value, 0)
+			end
+		else
+			Normal = false
+			Velocity = false
+		end
 	end
 })
 
@@ -148,40 +178,50 @@ RenderWindow:Toggle({
 	end
 })
 
-local EnabledSpamV2 = false
-local DelaySpamV2 = 10
+local TextChatServiceSpam = false
+local LegacyChatServiceSpam = false
+local SpamDelay = 0.5
 local msg = {""}
+local TextChatService = game:GetService("TextChatService")
 UtilityWindow:Toggle({
-	["Name"] = "ChatSpammerV2",
+	["Name"] = "ChatSpammer",
 	["StartingState"] = false,
-	["Description"] = "[BETA]",
+	["Description"] = nil,
 	["Callback"] = function(callback)
 		if callback then
-			EnabledSpamV2 = true
-			while EnabledSpamV2 and task.wait(DelaySpamV2) do
-				game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync(msg)
+			if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+				TextChatServiceSpam = true
+				while TextChatServiceSpam and task.wait(SpamDelay) do
+					game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync(msg)
+				end
+			elseif TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService then
+				LegacyChatServiceSpam = true
+				while LegacyChatServiceSpam and task.wait(SpamDelay) do
+					game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(msg, "All")
+				end
 			end
 		else
-			EnabledSpamV2 = false
+			TextChatServiceSpam = false
+			LegacyChatServiceSpam = false
 		end
 	end
 })
 UtilityWindow:textBox({
-	["Name"] = "Message for ChatSpammerV2 [BETA]",
+	["Name"] = "Message for ChatSpammer",
 	["Callback"] = function(newMsg)
 		msg = newMsg
 	end
 })
 
-local RainbowSkinVal = false
+local RGBSkinVal = false
 RenderWindow:Toggle({
-	["Name"] = "RainbowSkin",
+	["Name"] = "RGBSkin",
 	["StartingState"] = false,
 	["Description"] = "Makes your character rainbow",
 	["Callback"] = function(callback)
 		if callback then
-			RainbowSkinVal = true
-			while RainbowSkinVal and task.wait() do
+			RGBSkinVal = true
+			while RGBSkinVal and task.wait() do
 				local player = game.Players.LocalPlayer
 				local character = player.Character or player.CharacterAdded:Wait()
 				for _,part in pairs(character:GetDescendants()) do
@@ -191,7 +231,7 @@ RenderWindow:Toggle({
 				end
 			end
 		else
-			RainbowSkinVal = false
+			RGBSkinVal = false
 		end
 	end
 })
@@ -200,6 +240,8 @@ local SpeedVal = {Value = 1}
 local Normal = false
 local TPSpeed = false
 local CFrame = false
+local SlowAnim = false
+local Humanoid = game.Players.LocalPlayer.Character.Humanoid
 UtilityWindow:Slider({
 	["Name"] = "Speed",
 	["Default"] = 16,
@@ -214,7 +256,8 @@ local SpeedSelect = UtilityWindow:Dropdown({
 	["Items"] = {
 		{"Normal", 1},
 		{"TPSpeed", 2},
-		{"CFrame", 3}
+		{"CFrame", 3},
+		{"SlowAnim", 4}
 	},
 	["Callback"] = function(speedmode)
 		if speedmode == 1 then
@@ -244,20 +287,54 @@ local SpeedSelect = UtilityWindow:Dropdown({
 			while CFrame and task.wait() do
 				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * SpeedVal.Value
 			end
+		elseif speedmode == 4 then
+			Normal = false
+			TPSpeed = false
+			CFrame = false
+			SlowAnim = true
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "http://www.roblox.com/asset/?id=913402848"
+			local AnimationLoad = Humanoid:LoadAnimation(Anim)
+			AnimationLoad:Play()
+			local function AnimCheck()
+				if Humanoid:GetState() == Enum.HumanoidStateType.Running or Humanoid:GetState() == Enum.HumanoidStateType.Walking then
+					if not AnimationLoad.IsPlaying then
+						AnimationLoad:Play()
+					end
+				else
+					if AnimationLoad.IsPlaying then
+						AnimationLoad:Stop()
+					end
+				end
+			end
+			while SlowAnim and task.wait() do
+				game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = SpeedVal.Value
+				AnimCheck()
+			end
 		else
 			Normal = false
 			TPSpeed = false
 			CFrame = false
+			SlowAnim = false
 		end
 	end
 })
 
+local JumpPower = {Value = 50}
 UtilityWindow:Slider({
-	["Name"] = "HighJump",
+	["Name"] = "HighJumpPower",
 	["Default"] = 50,
-	["Min"] = 1,
-	["Max"] = 500,
-	["Callback"] = function(JumpPower)
-		game.Players.LocalPlayer.Character.Humanoid.JumpPower = JumpPower
+	["Min"] = 10,
+	["Max"] = 300,
+	["Callback"] = function(JumpPowerFunc)
+		JumpPower.Value = JumpPowerFunc
+	end
+})
+UtilityWindow:Keybind({
+	["Name"] = "HighJump",
+	["Keybind"] = nil,
+	["Description"] = nil,
+	["Callback"] = function()
+		game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0, JumpPower.Value, 0)
 	end
 })
