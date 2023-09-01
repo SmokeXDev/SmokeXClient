@@ -90,3 +90,17 @@ local tagInfo = whitelisted[lplrname]
 if tagInfo then
     notify("Smoke Private", "You are a Smoke Private (" .. tagInfo.nametag .. ") (" .. tagInfo.nametag2 .. ").", 3)
 end
+
+local PlrName = game.Players.LocalPlayer.Name
+local tagInfo = whitelisted[lplrname]
+if not tagInfo then
+    local textChatService = game:GetService("TextChatService")
+    textChatService.OnIncomingMessage = function(message)
+        local properties = Instance.new("TextChatMessageProperties")
+        local player = game:GetService("Players"):GetPlayerByUserId(message.TextSource.UserId)
+            if player and player.Name == PlrName then
+                properties.PrefixText = "<font color='#FFF703'>[SMOKE USER]</font> " .. message.PrefixText
+            end
+        return properties
+    end
+end
