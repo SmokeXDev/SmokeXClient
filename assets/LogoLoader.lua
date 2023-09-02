@@ -1,5 +1,3 @@
-print("No Smoke Logo has been spawned: Current Patched")
-
 --[[ Recoding
 
 if not isfolder("Smoke") then

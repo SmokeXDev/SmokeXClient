@@ -1,5 +1,5 @@
+local DiscordInvite = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Discord%20Inviter/Source.lua"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/BlacklistV2/BlacklistLoader.lua", true))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/assets/LogoLoader.lua", true))()
 
 local GameID = tostring(game.PlaceId)
 local GameLoaderV1Supported = {
@@ -18,6 +18,7 @@ local GameLoaderV2Supported = {
     ["9285238704"] = true --Race Clicker
 }
 
+DiscordInvite.Prompt({["invite"] = "Sm2xSZBFDn", ["name"] = "Smoke Community"})
 if GameLoaderV1Supported[GameID] ~= nil then
     local scriptUrl = "https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/GameLoader/" .. GameID .. ".lua"
     loadstring(game:HttpGet(scriptUrl, true))()
