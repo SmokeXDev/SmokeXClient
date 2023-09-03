@@ -30,7 +30,7 @@ Smoke:Credit({
 
 --Loaded
 notify("Smoke", "Loaded Successfully!", 5)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/SmokeXTeam/NewDetect.lua", true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/NewDetect.lua", true))()
 
 --Feautres
 local Anim = game.Players.LocalPlayer.Character.Animate
@@ -330,31 +330,23 @@ UtilityWindow:Keybind({
 })
 
 --Game Features
-local AutoCollectVal = false
-UtilityWindow:Toggle({
-	["Name"] = "AutoCollect",
+local char = game:GetService("Players").LocalPlayer.Character
+BlatantWindow:Toggle({
+	["Name"] = "AutoFarm",
 	["StartingState"] = false,
+	["Description"] = "Auto Farming",
 	["Callback"] = function(callback)
 		if callback then
-			AutoCollectVal = true
-			while AutoCollectVal and task.wait() do
-				game:GetService("ReplicatedStorage"):WaitForChild("RemoteCalls"):WaitForChild("GameSpecific"):WaitForChild("Lobby"):WaitForChild("Collecting"):WaitForChild("CollectedSpeed"):FireServer(3)
-				game:GetService("ReplicatedStorage"):WaitForChild("RemoteCalls"):WaitForChild("GameSpecific"):WaitForChild("Lobby"):WaitForChild("Collecting"):WaitForChild("CollectedSpeed"):FireServer(2)
-				game:GetService("ReplicatedStorage"):WaitForChild("RemoteCalls"):WaitForChild("GameSpecific"):WaitForChild("Lobby"):WaitForChild("Collecting"):WaitForChild("CollectedSpeed"):FireServer(1)
-			end
+			game.Players.LocalPlayer.Character.Animate.Disabled = true
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0.791430056, 116.820633, -186.754868, -0.981703579, 1.53577525e-06, -0.190415546, 1.56365259e-05, 1, -7.25500504e-05, 0.190415546, -7.42000775e-05, -0.981703579)
+			char:FindFirstChild("Head").Anchored = true
+			char:FindFirstChild("UpperTorso").Anchored = true
+			char:FindFirstChild("UpperTorso").Anchored = true
 		else
-			AutoCollectVal = false
-		end
-	end
-})
-
-RenderWindow:Button({
-	["Name"] = "MiniFPSBoost",
-	["Description"] = "Removes some stuff in the game no needed",
-	["Callback"] = function(callback)
-		if callback then
-			game.workspace.Important.Doors:Destroy()
-			game.workspace.Important.Collecting:Destroy()
+			game:GetService("Players").LocalPlayer.Character.Animate.Disabled = false
+			char:FindFirstChild("Head").Anchored = false
+			char:FindFirstChild("UpperTorso").Anchored = false
+			char:FindFirstChild("UpperTorso").Anchored = false
 		end
 	end
 })

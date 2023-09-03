@@ -30,7 +30,7 @@ Smoke:Credit({
 
 --Loaded
 notify("Smoke", "Loaded Successfully!", 5)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/SmokeXTeam/NewDetect.lua", true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/NewDetect.lua", true))()
 
 --Feautres
 local Anim = game.Players.LocalPlayer.Character.Animate
@@ -326,5 +326,98 @@ UtilityWindow:Keybind({
 	["Description"] = nil,
 	["Callback"] = function()
 		game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0, JumpPower.Value, 0)
+	end
+})
+
+--Game Features
+local FarmJumpsVal = false
+CombatWindow:Toggle({
+	["Name"] = "FarmJumps",
+	["StartingState"] = false,
+	["Description"] = "Auto Farming Jumps",
+	["Callback"] = function(callback)
+		if callback then
+			FarmJumpsVal = true
+			while FarmJumpsVal and task.wait(0.5) do
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-500.47287, 5.51772547, 10915.1553, -0.999997258, -1.50035824e-08, 0.00233520381, -1.49010466e-08, 1, 4.39257235e-08, -0.00233520381, 4.38908074e-08, -0.999997258)
+			end
+		else
+			FarmJumpsVal = false
+		end
+	end
+})
+
+local FarmSpeedVal = false
+CombatWindow:Toggle({
+	["Name"] = "FarmSpeed",
+	["StartingState"] = false,
+	["Description"] = "Auto Farming Speed",
+	["Callback"] = function(callback)
+		if callback then
+			FarmSpeedVal = true
+			while FarmSpeedVal and task.wait(0.5) do
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-2496.354, 57.8458519, 38671.9609, -0.99582231, 8.23530932e-09, -0.0913119763, 1.93580751e-09, 1, 6.90773447e-08, 0.0913119763, 6.86119961e-08, -0.99582231)
+			end
+		else
+			FarmSpeedVal = false
+		end
+	end
+})
+
+local FarmHealthVal = false
+CombatWindow:Toggle({
+	["Name"] = "FarmHealth",
+	["StartingState"] = false,
+	["Description"] = "Auto Farming Health",
+	["Callback"] = function(callback)
+		if callback then
+			FarmHealthVal = true
+			while FarmHealthVal and task.wait(0.5) do
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-4500.24902, 6.88842297, 10845.2812, -0.999975204, -1.24351951e-08, 0.00704113534, -1.26406974e-08, 1, -2.91414697e-08, -0.00704113534, -2.92297528e-08, -0.999975204)
+			end
+		else
+			FarmHealthVal = false
+		end
+	end
+})
+
+local FarmDamageVal = false
+CombatWindow:Toggle({
+	["Name"] = "FarmDamage",
+	["StartingState"] = false,
+	["Description"] = "Auto Farming Damage",
+	["Callback"] = function(callback)
+		if callback then
+			FarmDamageVal = true
+			while FarmDamageVal and task.wait(0.1) do
+				game:GetService("ReplicatedStorage").AutoDamage:FireServer(true)
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-6500.04785, 0.198037609, 10220.5449, -0.998949587, -3.03456531e-08, 0.0458233096, -3.43861615e-08, 1, -8.73875337e-08, -0.0458233096, -8.8871424e-08, -0.998949587)
+			end
+		else
+			FarmDamageVal = false
+			game:GetService("ReplicatedStorage").AutoDamage:FireServer(false)
+		end
+	end
+})
+
+local FarmAllVal = false
+CombatWindow:Toggle({
+	["Name"] = "FarmAll",
+	["StartingState"] = false,
+	["Description"] = "Auto Farming everything",
+	["Callback"] = function(callback)
+		if callback then
+			FarmAllVal = true
+			while FarmAllVal and task.wait() do
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-500.47287, 5.51772547, 10915.1553, -0.999997258, -1.50035824e-08, 0.00233520381, -1.49010466e-08, 1, 4.39257235e-08, -0.00233520381, 4.38908074e-08, -0.999997258)
+				wait(0.5)
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-2496.354, 57.8458519, 38671.9609, -0.99582231, 8.23530932e-09, -0.0913119763, 1.93580751e-09, 1, 6.90773447e-08, 0.0913119763, 6.86119961e-08, -0.99582231)
+				wait(0.5)
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-4500.24902, 6.88842297, 10845.2812, -0.999975204, -1.24351951e-08, 0.00704113534, -1.26406974e-08, 1, -2.91414697e-08, -0.00704113534, -2.92297528e-08, -0.999975204)
+				wait(0.5)
+			end
+		else
+			FarmAllVal = false
+		end
 	end
 })

@@ -30,7 +30,7 @@ Smoke:Credit({
 
 --Loaded
 notify("Smoke", "Loaded Successfully!", 5)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/SmokeXTeam/NewDetect.lua", true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/NewDetect.lua", true))()
 
 --Feautres
 local Anim = game.Players.LocalPlayer.Character.Animate
@@ -330,3 +330,31 @@ UtilityWindow:Keybind({
 })
 
 --Game Features
+local AutoCollectVal = false
+UtilityWindow:Toggle({
+	["Name"] = "AutoCollect",
+	["StartingState"] = false,
+	["Callback"] = function(callback)
+		if callback then
+			AutoCollectVal = true
+			while AutoCollectVal and task.wait() do
+				game:GetService("ReplicatedStorage"):WaitForChild("RemoteCalls"):WaitForChild("GameSpecific"):WaitForChild("Lobby"):WaitForChild("Collecting"):WaitForChild("CollectedSpeed"):FireServer(3)
+				game:GetService("ReplicatedStorage"):WaitForChild("RemoteCalls"):WaitForChild("GameSpecific"):WaitForChild("Lobby"):WaitForChild("Collecting"):WaitForChild("CollectedSpeed"):FireServer(2)
+				game:GetService("ReplicatedStorage"):WaitForChild("RemoteCalls"):WaitForChild("GameSpecific"):WaitForChild("Lobby"):WaitForChild("Collecting"):WaitForChild("CollectedSpeed"):FireServer(1)
+			end
+		else
+			AutoCollectVal = false
+		end
+	end
+})
+
+RenderWindow:Button({
+	["Name"] = "MiniFPSBoost",
+	["Description"] = "Removes some stuff in the game no needed",
+	["Callback"] = function(callback)
+		if callback then
+			game.workspace.Important.Doors:Destroy()
+			game.workspace.Important.Collecting:Destroy()
+		end
+	end
+})

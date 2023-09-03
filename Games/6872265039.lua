@@ -196,7 +196,7 @@ local function findTouchInterest(tool)
 end
 
 infonotify("Smoke", "Loaded Successfully!", 5)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/SmokeXTeam/NewDetect.lua", true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/NewDetect.lua", true))()
 
 GuiLibrary.RemoveObject("TargetStrafeOptionsButton")
 GuiLibrary.RemoveObject("ArrowsOptionsButton")

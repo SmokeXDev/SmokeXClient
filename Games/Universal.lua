@@ -30,7 +30,7 @@ Smoke:Credit({
 
 --Loaded
 notify("Smoke", "Loaded Successfully!", 5)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/SmokeXTeam/NewDetect.lua", true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/NewDetect.lua", true))()
 
 --Feautres
 local Anim = game.Players.LocalPlayer.Character.Animate
@@ -328,60 +328,3 @@ UtilityWindow:Keybind({
 		game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0, JumpPower.Value, 0)
 	end
 })
-
---Game Features
-local TweenService = game:GetService('TweenService')
-local TeleportService = game:GetService('TeleportService')
-local TweenInfo = TweenInfo.new(1, Enum.EasingStyle.Linear)
-local FarmVal = false
-local teleportLocations = {
-    location1 = Vector3.new(-819.0669555664062, -65.4730453491211, 1279.520751953125),
-    location2 = Vector3.new(390.0600280761719, -65.4730453491211, 1186.06201171875),
-    location3 = Vector3.new(-786.5128173828125, -65.4730453491211, 1092.87646484375)
-}
-function teleportTo(location)
-	local player = game.Players.LocalPlayer
-	local character = player.Character
-	if character and character:FindFirstChild('HumanoidRootPart') then
-		local cf = CFrame.new(location)
-		local teleporting = TweenService:Create(character.HumanoidRootPart, TweenInfo, { CFrame = cf })
-		teleporting:Play()
-		teleporting.Completed:Wait()
-	end
-end
-BlatantWindow:Toggle({
-    ["Name"] = "AutoFarm",
-    ["StartingState"] = false,
-    ["Description"] = "AutoFarming",
-    ["Callback"] = function(A_1)
-		if A_1 then
-			FarmVal = true
-			while FarmVal do
-				for _, location in pairs(teleportLocations) do
-					teleportTo(location)
-					wait(0.5)
-				end
-			end
-		else
-			FarmVal = false
-		end
-	end
-})
-
-local badgeEvent = game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Player"):WaitForChild("Badge")
-local badgeIDs = {
-	2148143252, 2148143267, 2148143277,
-	2148219466, 2148219482, 2148219495,
-	2148219501, 2148219511, 2148236562,
-	2148236572, 2148236579, 2148236589,
-	2148236592, 2148236600, 2148236608
-}
-UtilityWindow:Button{
-	["Name"] = "FreeBadges",
-	["Description"] = nil,
-	["Callback"] = function()
-		for _, badgeID in pairs(badgeIDs) do
-			badgeEvent:FireServer(badgeID)
-		end
-	end
-}
