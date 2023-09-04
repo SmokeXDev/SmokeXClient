@@ -30,7 +30,7 @@ Smoke:Credit({
 
 --Loaded
 notify("Smoke", "Loaded Successfully!", 5)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/NewDetect.lua", true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/Detector.lua", true))()
 
 --Feautres
 local Anim = game.Players.LocalPlayer.Character.Animate
