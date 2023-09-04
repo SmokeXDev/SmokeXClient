@@ -27,6 +27,9 @@ Smoke:Credit({
 	["Name"] = "xysim github",
 	["Github"] = "github.com/SmokeXDev"
 })
+Smoke:set_status(
+	"Smoke Status | Online"
+)
 
 --Loaded
 notify("Smoke", "Loaded Successfully!", 5)
