@@ -2,7 +2,7 @@ if not shared.VapeExecuted then
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))()
 else end
 
-wait(2)
+wait(0.5)
 
 -- Credits to Inf Yield & all the other scripts that helped me make bypasses
 local GuiLibrary = shared.GuiLibrary
@@ -209,9 +209,9 @@ runcode(function()
 		["Name"] = "NoAnim",
 		["Function"] = function(callback)
 			if callback then
-				game:GetService("Players").LocalPlayer.Character.Animate.Disabled = true
+				game.Players.LocalPlayer.Character.Animate.Disabled = true
 			else
-				game:GetService("Players").LocalPlayer.Character.Animate.Disabled = false
+				game.Players.LocalPlayer.Character.Animate.Disabled = false
 			end
 		end
 	})
@@ -276,4 +276,40 @@ runcode(function()
 			end
 		end
 	})
+end)
+
+local ChillUIColor = Color3.new(0, 0, 255)
+local ColorSet = {Value = 0}
+runcode(function()
+    local ChillUI
+    ChillUI = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+        ["Name"] = "ChillUI",
+        ["Function"] = function(callback)
+            if callback then
+                ChillUI = Instance.new("ScreenGui")
+                ChillUI.Name = "ChillUI"
+                ChillUI.ResetOnSpawn = false
+                local Frame = Instance.new("Frame")
+                Frame.Name = "Frame"
+                Frame.Parent = ChillUI
+                Frame.BackgroundTransparency = 0.5
+                Frame.Visible = true
+                Frame.BorderColor3 = Color3.new(0, 0, 0)
+                Frame.BorderSizePixel = 0
+                Frame.Size = UDim2.new(9e9, 9e9, 9e9, 9e9)
+                ChillUI.Parent = game.CoreGui
+                ChillUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+            else
+                ChillUI.Frame.Visible = false
+            end
+        end
+    })
+    ColorSet = ChillUI.CreateColorSlider({
+        ["Name"] = "UI Color",
+        ["Default"] = 1,
+        ["Function"] = function(R, G, B)
+            ChillUIColor = Color3.new(R, G, B)
+            ChillUI.Frame.BackgroundColor3 = ChillUIColor
+        end
+    })
 end)

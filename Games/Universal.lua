@@ -331,3 +331,42 @@ UtilityWindow:Keybind({
 		game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0, JumpPower.Value, 0)
 	end
 })
+
+local ChillUIColor = Color3.new(0, 0, 255)
+RenderWindow:Toggle({
+    ["Name"] = "ChillUI",
+    ["StartingState"] = false,
+    ["Description"] = "A Chill UI",
+    ["Callback"] = function(callback)
+        if callback then
+            ChillUI = Instance.new("ScreenGui")
+            ChillUI.Name = "ChillUI"
+            ChillUI.ResetOnSpawn = false
+            local Frame = Instance.new("Frame")
+            Frame.Name = "Frame"
+            Frame.Parent = ChillUI
+            Frame.BackgroundTransparency = 0.5
+			Frame.Visible = true
+            Frame.BorderColor3 = Color3.new(0, 0, 0)
+            Frame.BorderSizePixel = 0
+            Frame.Size = UDim2.new(9e9, 9e9, 9e9, 9e9)
+            ChillUI.Parent = game.CoreGui
+            ChillUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        else
+            ChillUI.Frame.Visible = false
+        end
+    end
+})
+RenderWindow:ColorPicker({
+    ["Style"] = GuiLibrary.ColorPickerStyles.Legacy,
+    ["Callback"] = function(NewUIColor)
+        ChillUIColor = NewUIColor
+        if ChillUI.Frame.Visible == true then
+            ChillUI.Frame.BackgroundColor3 = NewUIColor
+		elseif ChillUI.Frame.Visible == false then
+			warnnotify("ChillUI", "ChillUI is not enabled!", 8)
+		else
+			warnnotify("ChillUI", "ChillUI is not enabled!", 8)
+        end
+    end
+})

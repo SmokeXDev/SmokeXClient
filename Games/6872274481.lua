@@ -2,7 +2,7 @@ if not shared.VapeExecuted then
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))()
 else end
 
-wait(2)
+wait(0.5)
 
 -- Credits to Inf Yield & all the other scripts that helped me make bypasses
 local GuiLibrary = shared.GuiLibrary
@@ -206,9 +206,9 @@ runcode(function()
 		["Name"] = "NoAnim",
 		["Function"] = function(callback)
 			if callback then
-				game:GetService("Players").LocalPlayer.Character.Animate.Disabled = true
+				game.Players.LocalPlayer.Character.Animate.Disabled = true
 			else
-				game:GetService("Players").LocalPlayer.Character.Animate.Disabled = false
+				game.Players.LocalPlayer.Character.Animate.Disabled = false
 			end
 		end
 	})
@@ -280,29 +280,6 @@ runcode(function()
 end)
 
 runcode(function()
-	local GravityV2 = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-		["Name"] = "GravityV2",
-		["Function"] = function(callback)
-		if callback then
-				workspace.Gravity = GravitiyVal
-			end
-		end,
-		["Hovertext"] = "Change your gravity"
-	})
-	GravityV2.CreateSlider({
-		["Name"] = "GravityV2",
-		["Min"] = 0,
-		["Max"] = 192.2,
-		["Function"] = function(GravitiyVal)
-			if GravityV2.Enabled then
-				workspace.Gravity = GravitiyVal
-			end
-		end,
-		["Default"] = 192.2
-	})
-end)
-
-runcode(function()
 	local ChatDisabler = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		["Name"] = "ChatDisabler",
 		["Function"] = function(callback)
@@ -358,68 +335,70 @@ runcode(function()
 end)
 
 runcode(function()
-	local RainbowSkinVal = false
-	local RainbowSkin = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
-		["Name"] = "RainbowSkin",
+	local RGBSkinVal = false
+	local RGBSkin = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		["Name"] = "RGBSkin",
 		["Function"] = function(callback)
 			if callback then
-				RainbowSkinVal = true
-				while RainbowSkinVal and task.wait() do
+				RGBSkinVal = true
+				while RGBSkinVal and task.wait() do
 					local player = game.Players.LocalPlayer
 					local character = player.Character or player.CharacterAdded:Wait()
 					for _,part in pairs(character:GetDescendants()) do
-					if part:IsA("BasePart") then
-						part.Color = Color3.new(math.random(), math.random(), math.random())
-					end
+						if part:IsA("BasePart") then
+							part.Color = Color3.new(math.random(), math.random(), math.random())
+						end
 					end
 				end
 			else
-				RainbowSkinVal = false
+				RGBSkinVal = false
 			end
 		end
 	})
 end)
 
 runcode(function()
-	local Part = Instance.new("Part")
-	local AntiVoidV3 = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
-		["Name"] = "AntiVoidV3",
+	local HumanoidRootPart = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+	local AntiVoidPart
+	local AntiVoidV4 = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
+		["Name"] = "AntiVoidV4",
 		["Function"] = function(callback)
 			if callback then
-				Part.Size = Vector3.new(9e9, 2, 9e9)
-				Part.Anchored = true
-				Part.CanCollide = false
-				Part.Transparency = 1
-				Part.Parent = game.Workspace
-				Part.Position = Vector3.new(0, 30, 0)
-				Part.Touched:Connect(function(hit)
-					game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0, 100, 0)
-				end)
+				AntiVoidPart = Instance.new("Part")
+				AntiVoidPart.Name = "AntiVoidV4"
+				AntiVoidPart.Size = Vector3.new(1000000, 2, 1000000)
+				AntiVoidPart.Position = HumanoidRootPart.Position - Vector3.new(0, 30, 0)
+				AntiVoidPart.Anchored = true
+				AntiVoidPart.CanCollide = false
+				AntiVoidPart.Transparency = 1
+				AntiVoidPart.Parent = workspace
+				AntiVoidPart.Touched:Connect(function(hit) game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0, 150, 0) end)
 			else
-				Part:Destroy()
+				if AntiVoidPart then
+					AntiVoidPart:Destroy()
+				end
 			end
 		end
 	})
 end)
 
+
 runcode(function()
+	local Char = game.Players.LocalPlayer.Character
 	local AFKFarm = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
 		["Name"] = "AFKFarm",
 		["Function"] = function(callback)
 			if callback then
 				infonotify("AFKFarm", "Enabled", 5)
-				local char = game:GetService("Players").LocalPlayer.Character
-				char:FindFirstChild("HumanoidRootPart").CFrame = char:FindFirstChild("HumanoidRootPart").CFrame + Vector3.new(0,99,0)
-				char:FindFirstChild("Head").Anchored = true
-				char:FindFirstChild("UpperTorso").Anchored = true
-				char:FindFirstChild("UpperTorso").Anchored = true
+				Char.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 50000, 0)
+				Char.Head.Anchored = true
+				Char.UpperTorso.Anchored = true
+				Char.UpperTorso.Anchored = true
 			else
 				infonotify("AFKFarm", "Disabled!", 5)
-				local char = game:GetService("Players").LocalPlayer.Character
-				char:FindFirstChild("HumanoidRootPart").CFrame = char:FindFirstChild("HumanoidRootPart").CFrame + Vector3.new(0,99,0)
-				char:FindFirstChild("Head").Anchored = false
-				char:FindFirstChild("UpperTorso").Anchored = false
-				char:FindFirstChild("UpperTorso").Anchored = false
+				Char.Head.Anchored = false
+				Char.UpperTorso.Anchored = false
+				Char.UpperTorso.Anchored = false
 			end
 		end
 	})
@@ -733,4 +712,40 @@ runcode(function()
 		["Default"] = 23,
 		["Function"] = function() end
 	})
+end)
+
+local ChillUIColor = Color3.new(0, 0, 255)
+local ColorSet = {Value = 0}
+runcode(function()
+    local ChillUI
+    ChillUI = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+        ["Name"] = "ChillUI",
+        ["Function"] = function(callback)
+            if callback then
+                ChillUI = Instance.new("ScreenGui")
+                ChillUI.Name = "ChillUI"
+                ChillUI.ResetOnSpawn = false
+                local Frame = Instance.new("Frame")
+                Frame.Name = "Frame"
+                Frame.Parent = ChillUI
+                Frame.BackgroundTransparency = 0.5
+                Frame.Visible = true
+                Frame.BorderColor3 = Color3.new(0, 0, 0)
+                Frame.BorderSizePixel = 0
+                Frame.Size = UDim2.new(9e9, 9e9, 9e9, 9e9)
+                ChillUI.Parent = game.CoreGui
+                ChillUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+            else
+                ChillUI.Frame.Visible = false
+            end
+        end
+    })
+    ColorSet = ChillUI.CreateColorSlider({
+        ["Name"] = "UI Color",
+        ["Default"] = 1,
+        ["Function"] = function(R, G, B)
+            ChillUIColor = Color3.new(R, G, B)
+            ChillUI.Frame.BackgroundColor3 = ChillUIColor
+        end
+    })
 end)
