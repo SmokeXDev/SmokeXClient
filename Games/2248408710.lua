@@ -32,7 +32,7 @@ Smoke:set_status(
 )
 
 --Loaded
-notify("Smoke Universal", "Game not supported, universal loaded successfully!", 5)
+notify("Smoke", "Loaded Successfully!", 5)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/Detector.lua", true))()
 
 --Feautres
@@ -369,4 +369,61 @@ RenderWindow:ColorPicker({
 			warnnotify("ChillUI", "ChillUI is not enabled!", 8)
         end
     end
+})
+
+--Game Features
+local CoinsFarmVal = false
+local GenBoost = game:GetService("ReplicatedStorage").Remotes.generateBoost
+CombatWindow:Toggle({
+    ["Name"] = "CoinsFarm",
+    ["StartingState"] = false,
+    ["Description"] = "farming coins",
+    ["Callback"] = function(callback)
+        if callback then
+            CoinsFarmVal = true
+            while CoinsFarmVal and task.wait() do
+                GenBoost:FireServer("Coins", 0, 99999999)
+            end
+        else
+            CoinsFarmVal = false
+        end
+    end
+})
+
+local AutoSellVal = false
+local SellRemote = game:GetService("ReplicatedStorage").Remotes.sellBricks
+UtilityWindow:Toggle({
+    ["Name"] = "AutoSell",
+    ["StartingState"] = false,
+    ["Description"] = nil,
+    ["Callback"] = function(callback)
+        if callback then
+            AutoSellVal = true
+            while AutoSellVal and task.wait() do
+                SellRemote:FireServer()
+            end
+        else
+            AutoSellVal = false
+        end
+    end
+})
+
+local AutoRanksVal = false
+local GenBoost = game:GetService("ReplicatedStorage").Remotes.generateBoost
+local RankUP = game:GetService("ReplicatedStorage").Remotes.rankUp
+BlatantWindow:Toggle({
+	["Name"] = "AutoRanks",
+	["StartingState"] = false,
+	["Description"] = "Farming ranks for you",
+	["Callback"] = function(callback)
+		if callback then
+			AutoRanksVal = true
+			while AutoRanksVal and task.wait() do
+				GenBoost:FireServer("Levels", 0, 15)
+				RankUP:FireServer()
+			end
+		else
+			AutoRanksVal = false
+		end
+	end
 })
