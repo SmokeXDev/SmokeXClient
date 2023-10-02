@@ -1,464 +1,57 @@
-local GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
-local Smoke = GuiLibrary:Create{Name = "Smoke Client", Size = UDim2.fromOffset(600, 400), Theme = GuiLibrary.Themes.Dark, Link = "https://dsc.gg/smxke | "}
+local GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/Library.lua"))()
+local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/addons/ThemeManager.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/addons/SaveManager.lua"))()
+local DiscordInvite = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Discord%20Inviter/Source.lua"))()
+local Smoke = GuiLibrary:CreateWindow({["Title"] = "Smoke Client", ["Center"] = true, ["AutoShow"] = true, ["TabPadding"] = 8, ["MenuFadeTime"] = 0.2})
 
-function notify(Title, Text, Delay, Function)
-    Smoke:Notification{Title = Title, Text = Text, Duration = Delay, Function = Callback}
+--Variables
+local Players = game:GetService("Players")
+local Anim = Players.LocalPlayer.Character.Animate
+local Mouse = Players.LocalPlayer:GetMouse()
+local Lighting = game:GetService("Lighting")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Char = Players.LocalPlayer.Character
+local Hum = Char.Humanoid
+local PlrStats = Players.LocalPlayer.leaderstats
+local HumRootPart = Char:WaitForChild("HumanoidRootPart")
+local Service = ReplicatedStorage:WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services")
+local EggRemote = Service:WaitForChild("EggService"):WaitForChild("RF"):WaitForChild("Open")
+local ClickRemote = Service:WaitForChild("ClickService"):WaitForChild("RF"):WaitForChild("Click")
+local BestPetRemote = Service:WaitForChild("PetsService"):WaitForChild("RF"):WaitForChild("EquipBest")
+local CraftRemote = Service:WaitForChild("PetsService"):WaitForChild("RF"):WaitForChild("CraftAll")
+local CodeRemote = Service:WaitForChild("CodesService"):WaitForChild("RF"):WaitForChild("Redeem")
+local RebirthRemote = Service:WaitForChild("RebirthService"):WaitForChild("RF"):WaitForChild("Rebirth")
+
+--Notifications
+local function notify(title)
+	GuiLibrary:Notify(title)
 end
-function infonotify(Title, Text, Delay, Function)
-    Smoke:Notification{Title = Title, Text = Text, Duration = Delay, Function = Callback}
-end
-function warnnotify(Title, Text, Delay, Function)
-    Smoke:Notification{Title = Title, Text = Text, Duration = Delay, Function = Callback}
-end
 
---Tabs
-local CombatWindow = Smoke:Tab{Name = "Combat", Icon = "http://www.roblox.com/asset/?id=6035078889"}
-local BlatantWindow = Smoke:Tab{Name = "Blatant", Icon = "http://www.roblox.com/asset/?id=6034287525"}
-local UtilityWindow = Smoke:Tab{Name = "Utility", Icon = "http://www.roblox.com/asset/?id=6023426938"}
-local RenderWindow = Smoke:Tab{Name = "Render", Icon = "http://www.roblox.com/asset/?id=6031075931"}
-
---Other
-Smoke:Credit({
-	["Name"] = "xysim",
-	["Description"] = "Smoke Developer",
-	["Discord"] = "discord.gg/Sm2xSZBFDn"
-})
-Smoke:Credit({
-	["Name"] = "xysim github",
-	["Github"] = "github.com/SmokeXDev"
-})
-Smoke:set_status(
-	"Smoke Status | Online"
-)
-
---Loaded
-notify("Smoke", "Loaded Successfully!", 5)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/Detector.lua", true))()
-
---Feautres
-local Anim = game.Players.LocalPlayer.Character.Animate
-UtilityWindow:Toggle{
-    ["Name"] = "NoAnim",
-    ["StartingState"] = false,
-    ["Description"] = "Removes your roblox anim",
-    ["Callback"] = function(callback) 
-        if callback then
-            Anim.Disabled = true
-        else
-            Anim.Disabled = false
-        end
-    end
-}
-
-BlatantWindow:Button({
-	["Name"] = "MassReport",
-	["Callback"] = function()
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/MassReport.lua", true))()
-	end,
-	["Description"] = "MassReporting everyone"
-})
-
-local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
-RenderWindow:Toggle({
-	["Name"] = "Crosshair",
-	["StartingState"] = false,
-	["Callback"] = function(callback)
-		if callback then
-			Mouse.Icon = "rbxassetid://9943168532"
-		else
-			Mouse.Icon = ""
-		end
-	end
-})
-
-local NightVal = false
-RenderWindow:Toggle({
-	["Name"] = "Night",
-	["StartingState"] = false,
-	["Description"] = "Set time to night",
-	["Callback"] = function(callback)
-		if callback then
-			NightVal = true
-			while NightVal and task.wait(0.3) do
-				game:GetService("Lighting").TimeOfDay = "00:00:00"
-			end
-		else
-			NightVal = false
-			wait(0.3)
-			game:GetService("Lighting").TimeOfDay = "13:00:00"
-		end
-	end
-})
-
-local ErrorTimeVal = false
-RenderWindow:Toggle({
-	["Name"] = "ErrorTime",
-	["StartingState"] = false,
-	["Callback"] = function(callback)
-		if callback then
-			ErrorTimeVal = true
-			while ErrorTimeVal and task.wait(0.1) do
-				game.Lighting.ClockTime = 1
-				wait(0.1)
-				game.Lighting.ClockTime = 13
-			end
-		else
-			ErrorTimeVal = false
-			game.Lighting.ClockTime = 1
-		end
-	end
-})
-
+--Features Variables
+local NightVar = false
+local ErrorTimeVar = false
 local GravitiyVal = {Value = 1}
-local Normal = false
-local Velocity = false
-UtilityWindow:Slider({
-	["Name"] = "Gravity",
-	["Default"] = 192.2,
-	["Min"] = 0,
-	["Max"] = 192.2,
-	["Callback"] = function(GravityFunc) GravitiyVal.Value = GravityFunc end
-})
-local GravitySelect = UtilityWindow:Dropdown({
-	["Name"] = "GravityMode",
-	["StartingText"] = "Select Gravity...",
-	["Description"] = nil,
-	["Items"] = {
-		{"Normal", 1},
-		{"Velocity", 2}
-	},
-	["Callback"] = function(gravitymode)
-		if gravitymode == 1 then
-			Velocity = false
-			Normal = true
-			while Normal and task.wait() do
-				game.workspace.Gravity = GravitiyVal.Value
-			end
-		elseif gravitymode == 2 then
-			Normal = false
-			Velocity = true
-			game.workspace.Gravity = 192.2
-			while Velocity and task.wait(.2) do
-				game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0, GravitiyVal.Value, 0)
-			end
-		else
-			Normal = false
-			Velocity = false
-		end
-	end
-})
-
-RenderWindow:Toggle({
-	["Name"] = "ChatDisabler",
-	["StartingState"] = false,
-	["Description"] = "Remove ChatUI",
-	["Callback"] = function(callback)
-		if callback then
-			local succ, err = pcall(function() game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Chat, false) end)
-			if succ then
-				-- disabled
-			elseif err then
-				notify("ChatDisabler", "Error has occured while trying to disable the chat", 5)
-			end
-		else
-			local succ, err = pcall(function() game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true) end)
-			if succ then
-				-- restored
-			elseif err then
-				notify("ChatDisabler", "Error has occured while trying to enable the chat", 5)
-			end
-		end
-	end
-})
-
+local NormalGrav = false
+local VelocityGrav = false
 local TextChatServiceSpam = false
 local LegacyChatServiceSpam = false
-local SpamDelay = 0.5
 local msg = {""}
-local TextChatService = game:GetService("TextChatService")
-UtilityWindow:Toggle({
-	["Name"] = "ChatSpammer",
-	["StartingState"] = false,
-	["Description"] = nil,
-	["Callback"] = function(callback)
-		if callback then
-			if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-				TextChatServiceSpam = true
-				while TextChatServiceSpam and task.wait(SpamDelay) do
-					game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync(msg)
-				end
-			elseif TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService then
-				LegacyChatServiceSpam = true
-				while LegacyChatServiceSpam and task.wait(SpamDelay) do
-					game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(msg, "All")
-				end
-			end
-		else
-			TextChatServiceSpam = false
-			LegacyChatServiceSpam = false
-		end
-	end
-})
-UtilityWindow:textBox({
-	["Name"] = "Message for ChatSpammer",
-	["Callback"] = function(newMsg)
-		msg = newMsg
-	end
-})
-
-local RGBSkinVal = false
-RenderWindow:Toggle({
-	["Name"] = "RGBSkin",
-	["StartingState"] = false,
-	["Description"] = "Makes your character rainbow",
-	["Callback"] = function(callback)
-		if callback then
-			RGBSkinVal = true
-			while RGBSkinVal and task.wait() do
-				local player = game.Players.LocalPlayer
-				local character = player.Character or player.CharacterAdded:Wait()
-				for _,part in pairs(character:GetDescendants()) do
-					if part:IsA("BasePart") then
-						part.Color = Color3.new(math.random(), math.random(), math.random())
-					end
-				end
-			end
-		else
-			RGBSkinVal = false
-		end
-	end
-})
-
-local SpeedVal = {Value = 1}
-local Normal = false
+local RGBSkinVar = false
+local SpeedValue = {Value = 1}
+local NormalSpeed = false
 local TPSpeed = false
-local CFrame = false
-local SlowAnim = false
-local Humanoid = game.Players.LocalPlayer.Character.Humanoid
-UtilityWindow:Slider({
-	["Name"] = "Speed",
-	["Default"] = 16,
-	["Min"] = 1,
-	["Max"] = 100,
-	["Callback"] = function(SpeedFunc) SpeedVal.Value = SpeedFunc end
-})
-local SpeedSelect = UtilityWindow:Dropdown({
-	["Name"] = "SpeedMode",
-	["StartingText"] = "Select Speed...",
-	["Description"] = nil,
-	["Items"] = {
-		{"Normal", 1},
-		{"TPSpeed", 2},
-		{"CFrame", 3},
-		{"SlowAnim", 4}
-	},
-	["Callback"] = function(speedmode)
-		if speedmode == 1 then
-			TPSpeed = false
-			CFrame = false
-			Normal = true
-			while Normal and task.wait() do
-				game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = SpeedVal.Value
-			end
-		elseif speedmode == 2 then
-			notify("TPSpeed", "Default: 5")
-			SpeedVal.Value = 5
-			Normal = false
-			CFrame = false
-			TPSpeed = true
-			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
-			while TPSpeed and task.wait(.5) do
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * SpeedVal.Value
-			end
-		elseif speedmode == 3 then
-			notify("CFrame", "Default: 1")
-			SpeedVal.Value = 1
-			Normal = false
-			TPSpeed = false
-			CFrame = true
-			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
-			while CFrame and task.wait() do
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * SpeedVal.Value
-			end
-		elseif speedmode == 4 then
-			Normal = false
-			TPSpeed = false
-			CFrame = false
-			SlowAnim = true
-			local Anim = Instance.new("Animation")
-			Anim.AnimationId = "http://www.roblox.com/asset/?id=913402848"
-			local AnimationLoad = Humanoid:LoadAnimation(Anim)
-			AnimationLoad:Play()
-			local function AnimCheck()
-				if Humanoid:GetState() == Enum.HumanoidStateType.Running or Humanoid:GetState() == Enum.HumanoidStateType.Walking then
-					if not AnimationLoad.IsPlaying then
-						AnimationLoad:Play()
-					end
-				else
-					if AnimationLoad.IsPlaying then
-						AnimationLoad:Stop()
-					end
-				end
-			end
-			while SlowAnim and task.wait() do
-				game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = SpeedVal.Value
-				AnimCheck()
-			end
-		else
-			Normal = false
-			TPSpeed = false
-			CFrame = false
-			SlowAnim = false
-		end
-	end
-})
-
+local CFrameSpeed = false
+local SlowAnimSpeed = false
 local JumpPower = {Value = 50}
-UtilityWindow:Slider({
-	["Name"] = "HighJumpPower",
-	["Default"] = 50,
-	["Min"] = 10,
-	["Max"] = 300,
-	["Callback"] = function(JumpPowerFunc)
-		JumpPower.Value = JumpPowerFunc
-	end
-})
-UtilityWindow:Keybind({
-	["Name"] = "HighJump",
-	["Keybind"] = nil,
-	["Description"] = nil,
-	["Callback"] = function()
-		game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0, JumpPower.Value, 0)
-	end
-})
+local ChillUIColor = Color3.new(0, 1, 0)
+local AutoFarmVar = false
+local AutoPetsVar = false
+local AutoBestPetsVar = false
+local AutoCraftVar = false
+local AutoRebirthVar = false
+local AutoClickVar = false
 
-local ChillUIColor = Color3.new(0, 0, 255)
-RenderWindow:Toggle({
-    ["Name"] = "ChillUI",
-    ["StartingState"] = false,
-    ["Description"] = "A Chill UI",
-    ["Callback"] = function(callback)
-        if callback then
-            ChillUI = Instance.new("ScreenGui")
-            ChillUI.Name = "ChillUI"
-            ChillUI.ResetOnSpawn = false
-            local Frame = Instance.new("Frame")
-            Frame.Name = "Frame"
-            Frame.Parent = ChillUI
-            Frame.BackgroundTransparency = 0.5
-			Frame.Visible = true
-            Frame.BorderColor3 = Color3.new(0, 0, 0)
-            Frame.BorderSizePixel = 0
-            Frame.Size = UDim2.new(9e9, 9e9, 9e9, 9e9)
-            ChillUI.Parent = game.CoreGui
-            ChillUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-        else
-            ChillUI.Frame.Visible = false
-        end
-    end
-})
-RenderWindow:ColorPicker({
-    ["Style"] = GuiLibrary.ColorPickerStyles.Legacy,
-    ["Callback"] = function(NewUIColor)
-        ChillUIColor = NewUIColor
-        if ChillUI.Frame.Visible == true then
-            ChillUI.Frame.BackgroundColor3 = NewUIColor
-		elseif ChillUI.Frame.Visible == false then
-			warnnotify("ChillUI", "ChillUI is not enabled!", 8)
-		else
-			warnnotify("ChillUI", "ChillUI is not enabled!", 8)
-        end
-    end
-})
-
---Game Features
-local AutoFarmVal = false
-BlatantWindow:Toggle({
-    ["Name"] = "AutoFarm",
-    ["StartingState"] = false,
-    ["Description"] = "AutoFarming",
-    ["Callback"] = function(callback)
-        if callback then
-            AutoFarmVal = true
-            while AutoFarmVal and task.wait() do
-                game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("ClickService"):WaitForChild("RF"):WaitForChild("Click"):InvokeServer()
-                game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(-1000000, 0, 0)
-            end
-        else
-            AutoFarmVal = false
-        end
-    end
-})
-
-local plrs = game.Players.LocalPlayer.leaderstats
-local AutoPetsVal = false
-UtilityWindow:Toggle({
-    ["Name"] = "AutoPets",
-    ["StartingState"] = false,
-    ["Description"] = "auto buy pets",
-    ["Callback"] = function(callback)
-        if callback then
-            AutoPetsVal = true
-            while AutoPetsVal and task.wait() do
-                if plrs:FindFirstChild("🏁Wins").Value == 0 or plrs:FindFirstChild("🏁Wins").Value < 4 then
-                    notify("AutoPets", "Error: You need more wins, please use autofarm for get some wins and restart AutoPets.", 10)
-                    UtilityWindow.AutoPets.Enabled = false
-                elseif plrs:FindFirstChild("🏁Wins").Value == 4 or plrs:FindFirstChild("🏁Wins").Value > 4 then
-                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("EggService"):WaitForChild("RF"):WaitForChild("Open"):InvokeServer("Starter01", "1", {})
-                elseif plrs:FindFirstChild("🏁Wins").Value == 25 or plrs:FindFirstChild("🏁Wins").Value > 25 then
-                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("EggService"):WaitForChild("RF"):WaitForChild("Open"):InvokeServer("Starter02", "1", {})
-                elseif plrs:FindFirstChild("🏁Wins").Value == 175 or plrs:FindFirstChild("🏁Wins").Value > 175 then
-                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("EggService"):WaitForChild("RF"):WaitForChild("Open"):InvokeServer("Starter03", "1", {})
-                elseif plrs:FindFirstChild("🏁Wins").Value == 750 or plrs:FindFirstChild("🏁Wins").Value > 750 then
-                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("EggService"):WaitForChild("RF"):WaitForChild("Open"):InvokeServer("Starter04", "1", {})
-                elseif plrs:FindFirstChild("🏁Wins").Value == 7.500 or plrs:FindFirstChild("🏁Wins").Value > 7.500 then
-                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("EggService"):WaitForChild("RF"):WaitForChild("Open"):InvokeServer("Pro01", "1", {})
-                elseif plrs:FindFirstChild("🏁Wins").Value == 50.000 or plrs:FindFirstChild("🏁Wins").Value > 50.000 then
-                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("EggService"):WaitForChild("RF"):WaitForChild("Open"):InvokeServer("Pro02", "1", {})
-                elseif plrs:FindFirstChild("🏁Wins").Value == 200.000 or plrs:FindFirstChild("🏁Wins").Value > 200.000 then
-                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("EggService"):WaitForChild("RF"):WaitForChild("Open"):InvokeServer("Pro03", "1", {})
-                end
-            end
-        else
-            AutoPetsVal = false
-        end
-    end
-})
-
-local AutoBestPets = false
-UtilityWindow:Toggle({
-    ["Name"] = "AutoBestPets",
-    ["StartingState"] = false,
-    ["Description"] = "Auto equip best pets",
-    ["Callback"] = function(callback)
-        if callback then
-            AutoBestPets = true
-            while AutoBestPets and task.wait() do
-                game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("PetsService"):WaitForChild("RF"):WaitForChild("EquipBest"):InvokeServer()
-            end
-        else
-            AutoBestPets = false
-        end
-    end
-})
-
-local AutoCraftVal = false
-UtilityWindow:Toggle({
-    ["Name"] = "AutoCraft",
-    ["StartingState"] = false,
-    ["Description"] = "Auto Craft all pets",
-    ["Callback"] = function(callback)
-        if callback then
-            AutoCraftVal = true
-            while AutoCraftVal and task.wait() do
-                game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("PetsService"):WaitForChild("RF"):WaitForChild("CraftAll"):InvokeServer()
-            end
-        else
-            AutoCraftVal = false
-        end
-    end
-})
-
+--Lists
 local Codes = {
 	["happyanniversaryraceclicker"] = "Boost",
 	["sorryforanotherrejoin"] = "x5 Boosts",
@@ -486,47 +79,520 @@ local Codes = {
 	["myvalentine"] = "x3 Wins Boosts",
 	["opx3code"] = "x3 Wins Boosts"
 }
-CombatWindow:Button({
-	["Name"] = "ReedemCodes",
-	["Description"] = "Reedem all codes (Working only 1 time)",
-	["Callback"] = function()
+
+--Tabs
+local Tabs = {
+    CombatTab = Smoke:AddTab("Combat"),
+    BlatantTab = Smoke:AddTab("Blatant"),
+    UtilityTab = Smoke:AddTab("Utility"),
+    RenderTab = Smoke:AddTab("Render"),
+    ConfigTab = Smoke:AddTab("Config"),
+	CreditsTab = Smoke:AddTab("Credits")
+}
+
+--Boxs
+local Combat = Tabs.CombatTab:AddLeftGroupbox("Combat")
+local Blatant = Tabs.BlatantTab:AddLeftGroupbox("Blatant")
+local Utility = Tabs.UtilityTab:AddLeftGroupbox("Utility")
+local Render = Tabs.RenderTab:AddLeftGroupbox("Render")
+local Config = Tabs.ConfigTab:AddLeftGroupbox("Menu")
+local Credits = Tabs.CreditsTab:AddLeftGroupbox("Credits")
+
+--Credits
+local Discord = Credits:AddButton({
+	["Text"] = "Discord",
+	["Func"] = function()
+		DiscordInvite.Join("tzDKuCxKTE")
+	end,
+	["DoubleClick"] = false,
+	["Tooltip"] = "Join Smoke Client Discord Server"
+})
+
+--Loaded
+notify("Smoke Loaded Successfully!")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/Detector.lua", true))()
+
+--Feautres
+Utility:AddToggle("NoAnim", {
+    ["Text"] = "NoAnim",
+    ["Default"] = false,
+    ["Tooltip"] = "Removes your roblox anim",
+    ["Callback"] = function(callback)
+        if callback then
+            Anim.Disabled = true
+        else
+            Anim.Disabled = false
+        end
+    end
+})
+
+local MassReport = Blatant:AddButton({
+    ["Text"] = "MassReport",
+    ["Func"] = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/MassReport.lua", true))()
+    end,
+    ["DoubleClick"] = false,
+    ["Tooltip"] = "If you enable the MassReport you will not be able to disable it!"
+})
+
+Render:AddToggle("Crosshair", {
+    ["Text"] = "Crosshair",
+    ["Default"] = false,
+    ["Tooltip"] = "Replaces your cursor with a different one",
+    ["Callback"] = function(callback)
+        if callback then
+			Mouse.Icon = "rbxassetid://9943168532"
+		else
+			Mouse.Icon = ""
+		end
+    end
+})
+
+Render:AddToggle("Night", {
+    ["Text"] = "Night",
+    ["Default"] = false,
+    ["Tooltip"] = "Sets your time to night",
+    ["Callback"] = function(callback)
+        if callback then
+			NightVar = true
+			while NightVar and task.wait(0.3) do
+				Lighting.TimeOfDay = "00:00:00"
+			end
+		else
+			NightVar = false
+			wait(0.3)
+			Lighting.TimeOfDay = "13:00:00"
+		end
+    end
+})
+
+Render:AddToggle("ErrorTime", {
+    ["Text"] = "ErrorTime",
+    ["Default"] = false,
+    ["Tooltip"] = nil,
+    ["Callback"] = function(callback)
+        if callback then
+			ErrorTimeVar = true
+			while ErrorTimeVar and task.wait(0.1) do
+				Lighting.ClockTime = 1
+				wait(0.1)
+				Lighting.ClockTime = 13
+			end
+		else
+			ErrorTimeVar = false
+			Lighting.ClockTime = 1
+		end
+    end
+})
+
+Utility:AddDivider()
+Utility:AddSlider("Gravity", {
+    ["Text"] = "Gravity",
+    ["Default"] = 192.2,
+    ["Min"] = 0,
+    ["Max"] = 192.2,
+    ["Rounding"] = 1,
+    ["Compact"] = false,
+    ["Callback"] = function(GravityFunc)
+        GravitiyVal.Value = GravityFunc
+    end
+})
+Utility:AddDropdown("GravityMode", {
+    ["Values"] = {"Normal", "Velocity"},
+    ["Default"] = "Normal",
+    ["Multi"] = false,
+    ["Text"] = "GravityMode",
+    ["Tooltip"] = nil,
+    ["Callback"] = function(Value)
+        if Value == "Normal" then
+            VelocityGrav = false
+			NormalGrav = true
+			while NormalGrav and task.wait() do
+				game.workspace.Gravity = GravitiyVal.Value
+			end
+        elseif Value == "Velocity" then
+            NormalGrav = false
+			VelocityGrav = true
+			game.workspace.Gravity = 192.2
+			while VelocityGrav and task.wait(.2) do
+				game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0, GravitiyVal.Value, 0)
+			end
+        else
+            NormalGrav = false
+            VelocityGrav = false
+        end
+    end
+})
+Utility:AddDivider()
+
+Render:AddToggle("ChatDisabler", {
+    ["Text"] = "ChatDisabler",
+    ["Default"] = false,
+    ["Tooltip"] = "Removes chat",
+    ["Callback"] = function(callback)
+        if callback then
+            local succ, err = pcall(function() game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Chat, false) end)
+            if succ then
+                -- disabled
+            elseif err then
+                notify("Error has occured while trying to disable the chat")
+            end
+        else
+            local succ, err = pcall(function() game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true) end)
+            if succ then
+                -- restored
+            elseif err then
+                notify("Error has occured while trying to enable the chat")
+            end
+        end
+    end
+})
+
+Utility:AddDivider()
+Utility:AddToggle("ChatSpammer", {
+    ["Text"] = "ChatSpammer",
+    ["Default"] = false,
+    ["Tooltip"] = nil,
+    ["Callback"] = function(callback)
+        if callback then
+            if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
+                TextChatServiceSpam = true
+                while TextChatServiceSpam do
+                    game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync(msg)
+                    wait(0.5)
+                end
+            elseif game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.LegacyChatService then
+                LegacyChatServiceSpam = true
+                while LegacyChatServiceSpam do
+                    ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(msg, "All")
+                    wait(0.5)
+                end
+            end
+        else
+            TextChatServiceSpam = false
+            LegacyChatServiceSpam = false
+        end
+    end
+})
+Utility:AddInput("ChatSpammerMsg", {
+    ["Default"] = "Smxke on top",
+    ["Numeric"] = false,
+    ["Finished"] = false,
+    ["Text"] = "ChatSpammerMsg",
+    ["Tooltip"] = "Message to spam",
+    ["Placeholder"] = "Enter you're text...",
+    ["Callback"] = function(msgvalue)
+        msg = msgvalue
+    end
+})
+Utility:AddDivider()
+
+Render:AddToggle("RGBSkin", {
+    ["Text"] = "RGBSkin",
+    ["Default"] = false,
+    ["Tooltip"] = "Makes your character rainbow",
+    ["Callback"] = function(callback)
+        if callback then
+			RGBSkinVar = true
+			while RGBSkinVar and task.wait() do
+				local player = game.Players.LocalPlayer
+				local character = player.Character or player.CharacterAdded:Wait()
+				for _,part in pairs(character:GetDescendants()) do
+					if part:IsA("BasePart") then
+						part.Color = Color3.new(math.random(), math.random(), math.random())
+					end
+				end
+			end
+		else
+			RGBSkinVar = false
+		end
+    end
+})
+
+Utility:AddDivider()
+Utility:AddSlider("Speed", {
+    ["Text"] = "Speed",
+    ["Default"] = 16,
+    ["Min"] = 1,
+    ["Max"] = 100,
+    ["Rounding"] = 1,
+    ["Compact"] = false,
+    ["Callback"] = function(SpeedFunc)
+        SpeedValue.Value = SpeedFunc
+    end
+})
+Utility:AddDropdown("SpeedMode", {
+    ["Values"] = {"Normal", "TPSpeed", "CFrame", "SlowAnim"},
+    ["Default"] = "Normal",
+    ["Multi"] = false,
+    ["Text"] = "SpeedMode",
+    ["Tooltip"] = "Select a speed mode",
+    ["Callback"] = function(Value)
+        if Value == "Normal" then
+            NormalSpeed = true
+            TPSpeed = false
+            CFrameSpeed = false
+            SlowAnimSpeed = false
+            while NormalSpeed and task.wait() do
+                Hum.WalkSpeed = SpeedValue.Value
+            end
+        elseif Value == "TPSpeed" then
+            Options.Speed:SetValue(5)
+            NormalSpeed = false
+            TPSpeed = true
+            CFrameSpeed = false
+            SlowAnimSpeed = false
+            while TPSpeed and task.wait(.5) do
+                HumRootPart.CFrame = HumRootPart.CFrame + HumRootPart.CFrame.lookVector * SpeedValue.Value
+            end
+        elseif Value == "CFrame" then
+            Options.Speed:SetValue(1)
+            NormalSpeed = false
+            TPSpeed = false
+            CFrameSpeed = true
+            SlowAnimSpeed = false
+            while CFrameSpeed and task.wait() do
+                HumRootPart.CFrame = HumRootPart.CFrame + HumRootPart.CFrame.lookVector * SpeedValue.Value
+            end
+        elseif Value == "SlowAnim" then
+            NormalSpeed = false
+            TPSpeed = false
+            CFrameSpeed = false
+            SlowAnimSpeed = true
+            local Anim = Instance.new("Animation")
+            Anim.AnimationId = "http://www.roblox.com/asset/?id=913402848"
+            local AnimationLoad = Hum:LoadAnimation(Anim)
+            AnimationLoad:Play()
+            local function AnimCheck()
+                if Hum:GetState() == Enum.HumanoidStateType.Running or Hum:GetState() == Enum.HumanoidStateType.Walking then
+                    if not AnimationLoad.IsPlaying then
+                        AnimationLoad:Play()
+                    end
+                else
+                    if AnimationLoad.IsPlaying then
+                        AnimationLoad:Stop()
+                    end
+                end
+            end
+            while SlowAnimSpeed and task.wait() do
+                Hum.WalkSpeed = SpeedValue.Value
+                AnimCheck()
+            end
+        else
+            Hum.WalkSpeed = 16
+            NormalSpeed = false
+            TPSpeed = false
+            CFrameSpeed = false
+            SlowAnimSpeed = false
+        end
+    end
+})
+Utility:AddDivider()
+
+Utility:AddDivider()
+Utility:AddSlider("HighJumpPower", {
+    ["Text"] = "HighJumpPower",
+    ["Default"] = 50,
+    ["Min"] = 10,
+    ["Max"] = 300,
+    ["Rounding"] = 1,
+    ["Compact"] = false,
+    ["Callback"] = function(JumpPowerFunc)
+        JumpPower.Value = JumpPowerFunc
+    end
+})
+
+Utility:AddLabel("Keybind"):AddKeyPicker("HighJump", {
+    ["Default"] = "T",
+    ["SyncToggleState"] = false,
+    ["Mode"] = "Toggle",
+    ["Text"] = 'HighJump',
+    ["NoUI"] = false,
+    ["Callback"] = function(ToggleState)
+        if ToggleState == true then
+            HumRootPart.Velocity = Vector3.new(0, JumpPower.Value, 0)
+        else
+            HumRootPart.Velocity = Vector3.new(0, JumpPower.Value, 0)
+        end
+    end
+})
+Utility:AddDivider()
+
+Render:AddDivider()
+Render:AddToggle("ChillUI", {
+    ["Text"] = "ChillUI",
+    ["Default"] = false,
+    ["Tooltip"] = "Changes your screen color",
+    ["Callback"] = function(callback)
+        if callback then
+            ChillUI = Instance.new("ScreenGui")
+            ChillUI.Name = "ChillUI"
+            ChillUI.ResetOnSpawn = false
+            Frame = Instance.new("Frame")
+            Frame.Name = "Frame"
+            Frame.Parent = ChillUI
+            Frame.BackgroundTransparency = 0.5
+			Frame.Visible = true
+            Frame.BorderColor3 = Color3.new(0, 0, 0)
+            Frame.BorderSizePixel = 0
+            Frame.Size = UDim2.new(9e9, 9e9, 9e9, 9e9)
+            ChillUI.Parent = game.CoreGui
+            ChillUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        else
+            ChillUI.Frame.Visible = false
+        end
+    end
+})
+Render:AddLabel("ChillUIColor"):AddColorPicker("ChillUIColor", {
+    ["Default"] = Color3.new(0, 1, 0),
+    ["Title"] = "ChillUIColor",
+    ["Transparency"] = 0.5,
+    ["Callback"] = function(Value)
+        if ChillUI and ChillUI.Frame and ChillUI.Frame.Visible == true then
+            ChillUI.Frame.BackgroundColor3 = Value
+        elseif ChillUI and ChillUI.Frame and ChillUI.Frame.Visible == false then
+            Toggles.ChillUI:SetValue(true)
+        end
+    end
+})
+Render:AddDivider()
+
+--Config
+GuiLibrary.KeybindFrame.Visible = true;
+Config:AddButton("Uninject", function() GuiLibrary:Unload() end)
+Config:AddLabel("UI Keybind"):AddKeyPicker("UI Keybind", {["Default"] = "Zero", ["NoUI"] = true, ["Text"] = "UI Keybind"})
+GuiLibrary.ToggleKeybind = Options["UI Keybind"]
+ThemeManager:SetLibrary(GuiLibrary)
+SaveManager:SetLibrary(GuiLibrary)
+ThemeManager:SetFolder("Smoke/Themes")
+SaveManager:SetFolder("Smoke/Games/" .. game.PlaceId)
+SaveManager:BuildConfigSection(Tabs.ConfigTab)
+ThemeManager:ApplyToTab(Tabs.ConfigTab)
+SaveManager:LoadAutoloadConfig()
+
+--Game Features
+Utility:AddToggle("AutoClick", {
+	["Text"] = "AutoClick",
+	["Default"] = false,
+	["Tooltip"] = nil,
+	["Callback"] = function(callback)
+		if callback then
+			AutoClickVar = true
+			while AutoClickVar and task.wait() do
+				ClickRemote:InvokeServer()
+			end
+		else
+			AutoClickVar = false
+		end
+	end
+})
+
+Blatant:AddToggle("AutoFarm", {
+	["Text"] = "AutoFarm",
+	["Default"] = false,
+	["Tooltip"] = "Farms wins",
+	["Callback"] = function(callback)
+		if callback then
+			AutoFarmVar = true
+			while true and task.wait() do
+				ClickRemote:InvokeServer()
+				HumRootPart.Velocity = Vector3.new(-1000000, 0, 0)
+			end
+		else
+			AutoFarmVar = false
+		end
+	end
+})
+
+Utility:AddToggle("AutoPets", {
+	["Text"] = "AutoPets",
+	["Default"] = false,
+	["Tooltip"] = "Buys pets for you",
+	["Callback"] = function(callback)
+		if callback then
+			AutoPetsVar = true
+			while AutoPetsVar and task.wait() do
+				if PlrStats:FindFirstChild("🏁Wins").Value == 0 or PlrStats:FindFirstChild("🏁Wins").Value < 4 then
+                    notify("Error: You need more wins, please use autofarm for get some wins and restart AutoPets.")
+					Toggles.AutoPets:SetValue(false)
+                elseif PlrStats:FindFirstChild("🏁Wins").Value == 4 or PlrStats:FindFirstChild("🏁Wins").Value > 4 then
+                    EggRemote:InvokeServer("Starter01", "1", {})
+                elseif PlrStats:FindFirstChild("🏁Wins").Value == 25 or PlrStats:FindFirstChild("🏁Wins").Value > 25 then
+                    EggRemote:InvokeServer("Starter02", "1", {})
+                elseif PlrStats:FindFirstChild("🏁Wins").Value == 175 or PlrStats:FindFirstChild("🏁Wins").Value > 175 then
+                    EggRemote:InvokeServer("Starter03", "1", {})
+                elseif PlrStats:FindFirstChild("🏁Wins").Value == 750 or PlrStats:FindFirstChild("🏁Wins").Value > 750 then
+                    EggRemote:InvokeServer("Starter04", "1", {})
+                elseif PlrStats:FindFirstChild("🏁Wins").Value == 7.500 or PlrStats:FindFirstChild("🏁Wins").Value > 7.500 then
+                    EggRemote:InvokeServer("Pro01", "1", {})
+                elseif PlrStats:FindFirstChild("🏁Wins").Value == 50.000 or PlrStats:FindFirstChild("🏁Wins").Value > 50.000 then
+                    EggRemote:InvokeServer("Pro02", "1", {})
+                elseif PlrStats:FindFirstChild("🏁Wins").Value == 200.000 or PlrStats:FindFirstChild("🏁Wins").Value > 200.000 then
+                    EggRemote:InvokeServer("Pro03", "1", {})
+                end
+			end
+		else
+			AutoPetsVar = false
+		end
+	end
+})
+
+Utility:AddToggle("AutoBestPets", {
+	["Text"] = "AutoBestPets",
+	["Default"] = false,
+	["Tooltip"] = "Automatically equips the best pets you have",
+	["Callback"] = function(callback)
+		if callback then
+			AutoBestPetsVar = false
+			while AutoBestPetsVar and task.wait() do
+				BestPetRemote:InvokeServer()
+			end
+		else
+			AutoBestPetsVar = false
+		end
+	end
+})
+
+Utility:AddToggle("AutoCraft", {
+	["Text"] = "AutoCraft",
+	["Default"] = false,
+	["Tooltip"] = "Automatically crafts all pets for you",
+	["Callback"] = function(callback)
+		if callback then
+			AutoCraftVar = true
+            while AutoCraftVar and task.wait() do
+                CraftRemote:InvokeServer()
+            end
+        else
+            AutoCraftVar = false
+		end
+	end
+})
+
+local ReedemCodes = Combat:AddButton({
+	["Text"] = "ReedemCodes",
+	["Func"] = function()
 		for code, description in pairs(Codes) do
-			game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("CodesService"):WaitForChild("RF"):WaitForChild("Redeem"):InvokeServer(code)
-			notify(code, "You won: " .. description, 10)
+			CodeRemote:InvokeServer(code)
+			notify("Code: " .. code .. " You won: " .. description)
 		end
-	end
+	end,
+	["DoubleClick"] = false,
+	["Tooltip"] = "Reedems all codes for you"
 })
 
-local SeasonVal = false
-UtilityWindow:Toggle({
-	["Name"] = "SeasonRedeemer",
-	["StartingState"] = false,
-	["Description"] = "Auto reedem free rewards on the season pass",
+Utility:AddToggle("AutoRebirth", {
+	["Text"] = "AutoRebirth",
+	["Default"] = false,
+	["Tooltip"] = "Automatically rebirths for you",
 	["Callback"] = function(callback)
 		if callback then
-			SeasonVal = true
-			while SeasonVal and task.wait() do
-				game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("SeasonPassService"):WaitForChild("RF"):WaitForChild("ClaimTier"):InvokeServer()
+			AutoRebirthVar = true
+			while AutoRebirthVar and task.wait() do
+				RebirthRemote:InvokeServer()
 			end
 		else
-			SeasonVal = false
-		end
-	end
-})
-
-local AutoRebirth = false
-UtilityWindow:Toggle({
-	["Name"] = "AutoRebirth",
-	["StartingState"] = false,
-	["Description"] = "Auto rebirth",
-	["Callback"] = function(callback)
-		if callback then
-			AutoRebirth = true
-			while AutoRebirth and task.wait() do
-				game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("RebirthService"):WaitForChild("RF"):WaitForChild("Rebirth"):InvokeServer()
-			end
-		else
-			AutoRebirth = false
+			AutoRebirthVar = false
 		end
 	end
 })

@@ -1,220 +1,257 @@
-local GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
-local Smoke = GuiLibrary:Create{Name = "Smoke Client", Size = UDim2.fromOffset(600, 400), Theme = GuiLibrary.Themes.Dark, Link = "https://dsc.gg/smxke | "}
+local GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/Library.lua"))()
+local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/addons/ThemeManager.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/addons/SaveManager.lua"))()
+local DiscordInvite = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Discord%20Inviter/Source.lua"))()
+local Smoke = GuiLibrary:CreateWindow({["Title"] = "Smoke Client", ["Center"] = true, ["AutoShow"] = true, ["TabPadding"] = 8, ["MenuFadeTime"] = 0.2})
 
-function notify(Title, Text, Delay, Function)
-    Smoke:Notification{Title = Title, Text = Text, Duration = Delay, Function = Callback}
+--Variables
+local Players = game:GetService("Players")
+local Anim = Players.LocalPlayer.Character.Animate
+local Mouse = Players.LocalPlayer:GetMouse()
+local Lighting = game:GetService("Lighting")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Char = Players.LocalPlayer.Character
+local Hum = Char.Humanoid
+local HumRootPart = Char:WaitForChild("HumanoidRootPart")
+
+--Notifications
+local function notify(title)
+	GuiLibrary:Notify(title)
 end
-function infonotify(Title, Text, Delay, Function)
-    Smoke:Notification{Title = Title, Text = Text, Duration = Delay, Function = Callback}
-end
-function warnnotify(Title, Text, Delay, Function)
-    Smoke:Notification{Title = Title, Text = Text, Duration = Delay, Function = Callback}
-end
+
+--Features Variables
+local NightVar = false
+local ErrorTimeVar = false
+local GravitiyVal = {Value = 1}
+local NormalGrav = false
+local VelocityGrav = false
+local TextChatServiceSpam = false
+local LegacyChatServiceSpam = false
+local msg = {""}
+local RGBSkinVar = false
+local SpeedValue = {Value = 1}
+local NormalSpeed = false
+local TPSpeed = false
+local CFrameSpeed = false
+local SlowAnimSpeed = false
+local JumpPower = {Value = 50}
+local ChillUIColor = Color3.new(0, 1, 0)
 
 --Tabs
-local CombatWindow = Smoke:Tab{Name = "Combat", Icon = "http://www.roblox.com/asset/?id=6035078889"}
-local BlatantWindow = Smoke:Tab{Name = "Blatant", Icon = "http://www.roblox.com/asset/?id=6034287525"}
-local UtilityWindow = Smoke:Tab{Name = "Utility", Icon = "http://www.roblox.com/asset/?id=6023426938"}
-local RenderWindow = Smoke:Tab{Name = "Render", Icon = "http://www.roblox.com/asset/?id=6031075931"}
+local Tabs = {
+    CombatTab = Smoke:AddTab("Combat"),
+    BlatantTab = Smoke:AddTab("Blatant"),
+    UtilityTab = Smoke:AddTab("Utility"),
+    RenderTab = Smoke:AddTab("Render"),
+    ConfigTab = Smoke:AddTab("Config"),
+	CreditsTab = Smoke:AddTab("Credits")
+}
 
---Other
-Smoke:Credit({
-	["Name"] = "xysim",
-	["Description"] = "Smoke Developer",
-	["Discord"] = "discord.gg/Sm2xSZBFDn"
+--Boxs
+local Combat = Tabs.CombatTab:AddLeftGroupbox("Combat")
+local Blatant = Tabs.BlatantTab:AddLeftGroupbox("Blatant")
+local Utility = Tabs.UtilityTab:AddLeftGroupbox("Utility")
+local Render = Tabs.RenderTab:AddLeftGroupbox("Render")
+local Config = Tabs.ConfigTab:AddLeftGroupbox("Menu")
+local Credits = Tabs.CreditsTab:AddLeftGroupbox("Credits")
+
+--Credits
+local Discord = Credits:AddButton({
+	["Text"] = "Discord",
+	["Func"] = function()
+		DiscordInvite.Join("tzDKuCxKTE")
+	end,
+	["DoubleClick"] = false,
+	["Tooltip"] = "Join Smoke Client Discord Server"
 })
-Smoke:Credit({
-	["Name"] = "xysim github",
-	["Github"] = "github.com/SmokeXDev"
-})
-Smoke:set_status(
-	"Smoke Status | Online"
-)
 
 --Loaded
-notify("Smoke", "Loaded Successfully!", 5)
+notify("Smoke Loaded Successfully!")
 loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/Detector.lua", true))()
 
 --Feautres
-local Anim = game.Players.LocalPlayer.Character.Animate
-UtilityWindow:Toggle{
-    ["Name"] = "NoAnim",
-    ["StartingState"] = false,
-    ["Description"] = "Removes your roblox anim",
-    ["Callback"] = function(callback) 
+Utility:AddToggle("NoAnim", {
+    ["Text"] = "NoAnim",
+    ["Default"] = false,
+    ["Tooltip"] = "Removes your roblox anim",
+    ["Callback"] = function(callback)
         if callback then
             Anim.Disabled = true
         else
             Anim.Disabled = false
         end
     end
-}
-
-BlatantWindow:Button({
-	["Name"] = "MassReport",
-	["Callback"] = function()
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/MassReport.lua", true))()
-	end,
-	["Description"] = "MassReporting everyone"
 })
 
-local Mouse = game:GetService("Players").LocalPlayer:GetMouse()
-RenderWindow:Toggle({
-	["Name"] = "Crosshair",
-	["StartingState"] = false,
-	["Callback"] = function(callback)
-		if callback then
+local MassReport = Blatant:AddButton({
+    ["Text"] = "MassReport",
+    ["Func"] = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/MassReport.lua", true))()
+    end,
+    ["DoubleClick"] = false,
+    ["Tooltip"] = "If you enable the MassReport you will not be able to disable it!"
+})
+
+Render:AddToggle("Crosshair", {
+    ["Text"] = "Crosshair",
+    ["Default"] = false,
+    ["Tooltip"] = "Replaces your cursor with a different one",
+    ["Callback"] = function(callback)
+        if callback then
 			Mouse.Icon = "rbxassetid://9943168532"
 		else
 			Mouse.Icon = ""
 		end
-	end
+    end
 })
 
-local NightVal = false
-RenderWindow:Toggle({
-	["Name"] = "Night",
-	["StartingState"] = false,
-	["Description"] = "Set time to night",
-	["Callback"] = function(callback)
-		if callback then
-			NightVal = true
-			while NightVal and task.wait(0.3) do
-				game:GetService("Lighting").TimeOfDay = "00:00:00"
+Render:AddToggle("Night", {
+    ["Text"] = "Night",
+    ["Default"] = false,
+    ["Tooltip"] = "Sets your time to night",
+    ["Callback"] = function(callback)
+        if callback then
+			NightVar = true
+			while NightVar and task.wait(0.3) do
+				Lighting.TimeOfDay = "00:00:00"
 			end
 		else
-			NightVal = false
+			NightVar = false
 			wait(0.3)
-			game:GetService("Lighting").TimeOfDay = "13:00:00"
+			Lighting.TimeOfDay = "13:00:00"
 		end
-	end
+    end
 })
 
-local ErrorTimeVal = false
-RenderWindow:Toggle({
-	["Name"] = "ErrorTime",
-	["StartingState"] = false,
-	["Callback"] = function(callback)
-		if callback then
-			ErrorTimeVal = true
-			while ErrorTimeVal and task.wait(0.1) do
-				game.Lighting.ClockTime = 1
+Render:AddToggle("ErrorTime", {
+    ["Text"] = "ErrorTime",
+    ["Default"] = false,
+    ["Tooltip"] = nil,
+    ["Callback"] = function(callback)
+        if callback then
+			ErrorTimeVar = true
+			while ErrorTimeVar and task.wait(0.1) do
+				Lighting.ClockTime = 1
 				wait(0.1)
-				game.Lighting.ClockTime = 13
+				Lighting.ClockTime = 13
 			end
 		else
-			ErrorTimeVal = false
-			game.Lighting.ClockTime = 1
+			ErrorTimeVar = false
+			Lighting.ClockTime = 1
 		end
-	end
+    end
 })
 
-local GravitiyVal = {Value = 1}
-local Normal = false
-local Velocity = false
-UtilityWindow:Slider({
-	["Name"] = "Gravity",
-	["Default"] = 192.2,
-	["Min"] = 0,
-	["Max"] = 192.2,
-	["Callback"] = function(GravityFunc) GravitiyVal.Value = GravityFunc end
+Utility:AddDivider()
+Utility:AddSlider("Gravity", {
+    ["Text"] = "Gravity",
+    ["Default"] = 192.2,
+    ["Min"] = 0,
+    ["Max"] = 192.2,
+    ["Rounding"] = 1,
+    ["Compact"] = false,
+    ["Callback"] = function(GravityFunc)
+        GravitiyVal.Value = GravityFunc
+    end
 })
-local GravitySelect = UtilityWindow:Dropdown({
-	["Name"] = "GravityMode",
-	["StartingText"] = "Select Gravity...",
-	["Description"] = nil,
-	["Items"] = {
-		{"Normal", 1},
-		{"Velocity", 2}
-	},
-	["Callback"] = function(gravitymode)
-		if gravitymode == 1 then
-			Velocity = false
-			Normal = true
-			while Normal and task.wait() do
+Utility:AddDropdown("GravityMode", {
+    ["Values"] = {"Normal", "Velocity"},
+    ["Default"] = "Normal",
+    ["Multi"] = false,
+    ["Text"] = "GravityMode",
+    ["Tooltip"] = nil,
+    ["Callback"] = function(Value)
+        if Value == "Normal" then
+            VelocityGrav = false
+			NormalGrav = true
+			while NormalGrav and task.wait() do
 				game.workspace.Gravity = GravitiyVal.Value
 			end
-		elseif gravitymode == 2 then
-			Normal = false
-			Velocity = true
+        elseif Value == "Velocity" then
+            NormalGrav = false
+			VelocityGrav = true
 			game.workspace.Gravity = 192.2
-			while Velocity and task.wait(.2) do
+			while VelocityGrav and task.wait(.2) do
 				game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0, GravitiyVal.Value, 0)
 			end
-		else
-			Normal = false
-			Velocity = false
-		end
-	end
+        else
+            NormalGrav = false
+            VelocityGrav = false
+        end
+    end
+})
+Utility:AddDivider()
+
+Render:AddToggle("ChatDisabler", {
+    ["Text"] = "ChatDisabler",
+    ["Default"] = false,
+    ["Tooltip"] = "Removes chat",
+    ["Callback"] = function(callback)
+        if callback then
+            local succ, err = pcall(function() game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Chat, false) end)
+            if succ then
+                -- disabled
+            elseif err then
+                notify("Error has occured while trying to disable the chat")
+            end
+        else
+            local succ, err = pcall(function() game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true) end)
+            if succ then
+                -- restored
+            elseif err then
+                notify("Error has occured while trying to enable the chat")
+            end
+        end
+    end
 })
 
-RenderWindow:Toggle({
-	["Name"] = "ChatDisabler",
-	["StartingState"] = false,
-	["Description"] = "Remove ChatUI",
-	["Callback"] = function(callback)
-		if callback then
-			local succ, err = pcall(function() game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Chat, false) end)
-			if succ then
-				-- disabled
-			elseif err then
-				notify("ChatDisabler", "Error has occured while trying to disable the chat", 5)
-			end
-		else
-			local succ, err = pcall(function() game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true) end)
-			if succ then
-				-- restored
-			elseif err then
-				notify("ChatDisabler", "Error has occured while trying to enable the chat", 5)
-			end
-		end
-	end
+Utility:AddDivider()
+Utility:AddToggle("ChatSpammer", {
+    ["Text"] = "ChatSpammer",
+    ["Default"] = false,
+    ["Tooltip"] = nil,
+    ["Callback"] = function(callback)
+        if callback then
+            if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
+                TextChatServiceSpam = true
+                while TextChatServiceSpam do
+                    game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync(msg)
+                    wait(0.5)
+                end
+            elseif game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.LegacyChatService then
+                LegacyChatServiceSpam = true
+                while LegacyChatServiceSpam do
+                    ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(msg, "All")
+                    wait(0.5)
+                end
+            end
+        else
+            TextChatServiceSpam = false
+            LegacyChatServiceSpam = false
+        end
+    end
 })
+Utility:AddInput("ChatSpammerMsg", {
+    ["Default"] = "Smxke on top",
+    ["Numeric"] = false,
+    ["Finished"] = false,
+    ["Text"] = "ChatSpammerMsg",
+    ["Tooltip"] = "Message to spam",
+    ["Placeholder"] = "Enter you're text...",
+    ["Callback"] = function(msgvalue)
+        msg = msgvalue
+    end
+})
+Utility:AddDivider()
 
-local TextChatServiceSpam = false
-local LegacyChatServiceSpam = false
-local SpamDelay = 0.5
-local msg = {""}
-local TextChatService = game:GetService("TextChatService")
-UtilityWindow:Toggle({
-	["Name"] = "ChatSpammer",
-	["StartingState"] = false,
-	["Description"] = nil,
-	["Callback"] = function(callback)
-		if callback then
-			if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-				TextChatServiceSpam = true
-				while TextChatServiceSpam and task.wait(SpamDelay) do
-					game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync(msg)
-				end
-			elseif TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService then
-				LegacyChatServiceSpam = true
-				while LegacyChatServiceSpam and task.wait(SpamDelay) do
-					game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(msg, "All")
-				end
-			end
-		else
-			TextChatServiceSpam = false
-			LegacyChatServiceSpam = false
-		end
-	end
-})
-UtilityWindow:textBox({
-	["Name"] = "Message for ChatSpammer",
-	["Callback"] = function(newMsg)
-		msg = newMsg
-	end
-})
-
-local RGBSkinVal = false
-RenderWindow:Toggle({
-	["Name"] = "RGBSkin",
-	["StartingState"] = false,
-	["Description"] = "Makes your character rainbow",
-	["Callback"] = function(callback)
-		if callback then
-			RGBSkinVal = true
-			while RGBSkinVal and task.wait() do
+Render:AddToggle("RGBSkin", {
+    ["Text"] = "RGBSkin",
+    ["Default"] = false,
+    ["Tooltip"] = "Makes your character rainbow",
+    ["Callback"] = function(callback)
+        if callback then
+			RGBSkinVar = true
+			while RGBSkinVar and task.wait() do
 				local player = game.Players.LocalPlayer
 				local character = player.Character or player.CharacterAdded:Wait()
 				for _,part in pairs(character:GetDescendants()) do
@@ -224,125 +261,131 @@ RenderWindow:Toggle({
 				end
 			end
 		else
-			RGBSkinVal = false
+			RGBSkinVar = false
 		end
-	end
+    end
 })
 
-local SpeedVal = {Value = 1}
-local Normal = false
-local TPSpeed = false
-local CFrame = false
-local SlowAnim = false
-local Humanoid = game.Players.LocalPlayer.Character.Humanoid
-UtilityWindow:Slider({
-	["Name"] = "Speed",
-	["Default"] = 16,
-	["Min"] = 1,
-	["Max"] = 100,
-	["Callback"] = function(SpeedFunc) SpeedVal.Value = SpeedFunc end
+Utility:AddDivider()
+Utility:AddSlider("Speed", {
+    ["Text"] = "Speed",
+    ["Default"] = 16,
+    ["Min"] = 1,
+    ["Max"] = 100,
+    ["Rounding"] = 1,
+    ["Compact"] = false,
+    ["Callback"] = function(SpeedFunc)
+        SpeedValue.Value = SpeedFunc
+    end
 })
-local SpeedSelect = UtilityWindow:Dropdown({
-	["Name"] = "SpeedMode",
-	["StartingText"] = "Select Speed...",
-	["Description"] = nil,
-	["Items"] = {
-		{"Normal", 1},
-		{"TPSpeed", 2},
-		{"CFrame", 3},
-		{"SlowAnim", 4}
-	},
-	["Callback"] = function(speedmode)
-		if speedmode == 1 then
-			TPSpeed = false
-			CFrame = false
-			Normal = true
-			while Normal and task.wait() do
-				game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = SpeedVal.Value
-			end
-		elseif speedmode == 2 then
-			notify("TPSpeed", "Default: 5")
-			SpeedVal.Value = 5
-			Normal = false
-			CFrame = false
-			TPSpeed = true
-			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
-			while TPSpeed and task.wait(.5) do
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * SpeedVal.Value
-			end
-		elseif speedmode == 3 then
-			notify("CFrame", "Default: 1")
-			SpeedVal.Value = 1
-			Normal = false
-			TPSpeed = false
-			CFrame = true
-			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
-			while CFrame and task.wait() do
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * SpeedVal.Value
-			end
-		elseif speedmode == 4 then
-			Normal = false
-			TPSpeed = false
-			CFrame = false
-			SlowAnim = true
-			local Anim = Instance.new("Animation")
-			Anim.AnimationId = "http://www.roblox.com/asset/?id=913402848"
-			local AnimationLoad = Humanoid:LoadAnimation(Anim)
-			AnimationLoad:Play()
-			local function AnimCheck()
-				if Humanoid:GetState() == Enum.HumanoidStateType.Running or Humanoid:GetState() == Enum.HumanoidStateType.Walking then
-					if not AnimationLoad.IsPlaying then
-						AnimationLoad:Play()
-					end
-				else
-					if AnimationLoad.IsPlaying then
-						AnimationLoad:Stop()
-					end
-				end
-			end
-			while SlowAnim and task.wait() do
-				game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = SpeedVal.Value
-				AnimCheck()
-			end
-		else
-			Normal = false
-			TPSpeed = false
-			CFrame = false
-			SlowAnim = false
-		end
-	end
+Utility:AddDropdown("SpeedMode", {
+    ["Values"] = {"Normal", "TPSpeed", "CFrame", "SlowAnim"},
+    ["Default"] = "Normal",
+    ["Multi"] = false,
+    ["Text"] = "SpeedMode",
+    ["Tooltip"] = "Select a speed mode",
+    ["Callback"] = function(Value)
+        if Value == "Normal" then
+            NormalSpeed = true
+            TPSpeed = false
+            CFrameSpeed = false
+            SlowAnimSpeed = false
+            while NormalSpeed and task.wait() do
+                Hum.WalkSpeed = SpeedValue.Value
+            end
+        elseif Value == "TPSpeed" then
+            Options.Speed:SetValue(5)
+            NormalSpeed = false
+            TPSpeed = true
+            CFrameSpeed = false
+            SlowAnimSpeed = false
+            while TPSpeed and task.wait(.5) do
+                HumRootPart.CFrame = HumRootPart.CFrame + HumRootPart.CFrame.lookVector * SpeedValue.Value
+            end
+        elseif Value == "CFrame" then
+            Options.Speed:SetValue(1)
+            NormalSpeed = false
+            TPSpeed = false
+            CFrameSpeed = true
+            SlowAnimSpeed = false
+            while CFrameSpeed and task.wait() do
+                HumRootPart.CFrame = HumRootPart.CFrame + HumRootPart.CFrame.lookVector * SpeedValue.Value
+            end
+        elseif Value == "SlowAnim" then
+            NormalSpeed = false
+            TPSpeed = false
+            CFrameSpeed = false
+            SlowAnimSpeed = true
+            local Anim = Instance.new("Animation")
+            Anim.AnimationId = "http://www.roblox.com/asset/?id=913402848"
+            local AnimationLoad = Hum:LoadAnimation(Anim)
+            AnimationLoad:Play()
+            local function AnimCheck()
+                if Hum:GetState() == Enum.HumanoidStateType.Running or Hum:GetState() == Enum.HumanoidStateType.Walking then
+                    if not AnimationLoad.IsPlaying then
+                        AnimationLoad:Play()
+                    end
+                else
+                    if AnimationLoad.IsPlaying then
+                        AnimationLoad:Stop()
+                    end
+                end
+            end
+            while SlowAnimSpeed and task.wait() do
+                Hum.WalkSpeed = SpeedValue.Value
+                AnimCheck()
+            end
+        else
+            Hum.WalkSpeed = 16
+            NormalSpeed = false
+            TPSpeed = false
+            CFrameSpeed = false
+            SlowAnimSpeed = false
+        end
+    end
+})
+Utility:AddDivider()
+
+Utility:AddDivider()
+Utility:AddSlider("HighJumpPower", {
+    ["Text"] = "HighJumpPower",
+    ["Default"] = 50,
+    ["Min"] = 10,
+    ["Max"] = 300,
+    ["Rounding"] = 1,
+    ["Compact"] = false,
+    ["Callback"] = function(JumpPowerFunc)
+        JumpPower.Value = JumpPowerFunc
+    end
 })
 
-local JumpPower = {Value = 50}
-UtilityWindow:Slider({
-	["Name"] = "HighJumpPower",
-	["Default"] = 50,
-	["Min"] = 10,
-	["Max"] = 300,
-	["Callback"] = function(JumpPowerFunc)
-		JumpPower.Value = JumpPowerFunc
-	end
+Utility:AddLabel("Keybind"):AddKeyPicker("HighJump", {
+    ["Default"] = "T",
+    ["SyncToggleState"] = false,
+    ["Mode"] = "Toggle",
+    ["Text"] = 'HighJump',
+    ["NoUI"] = false,
+    ["Callback"] = function(ToggleState)
+        if ToggleState == true then
+            HumRootPart.Velocity = Vector3.new(0, JumpPower.Value, 0)
+        else
+            HumRootPart.Velocity = Vector3.new(0, JumpPower.Value, 0)
+        end
+    end
 })
-UtilityWindow:Keybind({
-	["Name"] = "HighJump",
-	["Keybind"] = nil,
-	["Description"] = nil,
-	["Callback"] = function()
-		game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0, JumpPower.Value, 0)
-	end
-})
+Utility:AddDivider()
 
-local ChillUIColor = Color3.new(0, 0, 255)
-RenderWindow:Toggle({
-    ["Name"] = "ChillUI",
-    ["StartingState"] = false,
-    ["Description"] = "A Chill UI",
+Render:AddDivider()
+Render:AddToggle("ChillUI", {
+    ["Text"] = "ChillUI",
+    ["Default"] = false,
+    ["Tooltip"] = "Changes your screen color",
     ["Callback"] = function(callback)
         if callback then
             ChillUI = Instance.new("ScreenGui")
             ChillUI.Name = "ChillUI"
             ChillUI.ResetOnSpawn = false
-            local Frame = Instance.new("Frame")
+            Frame = Instance.new("Frame")
             Frame.Name = "Frame"
             Frame.Parent = ChillUI
             Frame.BackgroundTransparency = 0.5
@@ -357,38 +400,50 @@ RenderWindow:Toggle({
         end
     end
 })
-RenderWindow:ColorPicker({
-    ["Style"] = GuiLibrary.ColorPickerStyles.Legacy,
-    ["Callback"] = function(NewUIColor)
-        ChillUIColor = NewUIColor
-        if ChillUI.Frame.Visible == true then
-            ChillUI.Frame.BackgroundColor3 = NewUIColor
-		elseif ChillUI.Frame.Visible == false then
-			warnnotify("ChillUI", "ChillUI is not enabled!", 8)
-		else
-			warnnotify("ChillUI", "ChillUI is not enabled!", 8)
+Render:AddLabel("ChillUIColor"):AddColorPicker("ChillUIColor", {
+    ["Default"] = Color3.new(0, 1, 0),
+    ["Title"] = "ChillUIColor",
+    ["Transparency"] = 0.5,
+    ["Callback"] = function(Value)
+        if ChillUI and ChillUI.Frame and ChillUI.Frame.Visible == true then
+            ChillUI.Frame.BackgroundColor3 = Value
+        elseif ChillUI and ChillUI.Frame and ChillUI.Frame.Visible == false then
+            Toggles.ChillUI:SetValue(true)
         end
     end
 })
+Render:AddDivider()
+
+--Config
+GuiLibrary.KeybindFrame.Visible = true;
+Config:AddButton("Uninject", function() GuiLibrary:Unload() end)
+Config:AddLabel("UI Keybind"):AddKeyPicker("UI Keybind", {["Default"] = "Zero", ["NoUI"] = true, ["Text"] = "UI Keybind"})
+GuiLibrary.ToggleKeybind = Options["UI Keybind"]
+ThemeManager:SetLibrary(GuiLibrary)
+SaveManager:SetLibrary(GuiLibrary)
+ThemeManager:SetFolder("Smoke/Themes")
+SaveManager:SetFolder("Smoke/Games/" .. game.PlaceId)
+SaveManager:BuildConfigSection(Tabs.ConfigTab)
+ThemeManager:ApplyToTab(Tabs.ConfigTab)
+SaveManager:LoadAutoloadConfig()
 
 --Game Features
-local char = game:GetService("Players").LocalPlayer.Character
-BlatantWindow:Toggle({
-	["Name"] = "AutoFarm",
-	["StartingState"] = false,
-	["Description"] = "Auto Farming",
+Blatant:AddToggle("AutoFarm", {
+	["Text"] = "AutoFarm",
+	["Default"] = false,
+	["Tooltip"] = "Farms wins",
 	["Callback"] = function(callback)
 		if callback then
-			game.Players.LocalPlayer.Character.Animate.Disabled = true
-			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0.791430056, 116.820633, -186.754868, -0.981703579, 1.53577525e-06, -0.190415546, 1.56365259e-05, 1, -7.25500504e-05, 0.190415546, -7.42000775e-05, -0.981703579)
-			char:FindFirstChild("Head").Anchored = true
-			char:FindFirstChild("UpperTorso").Anchored = true
-			char:FindFirstChild("UpperTorso").Anchored = true
+			Anim.Disabled = true
+			HumRootPart.CFrame = CFrame.new(0.791430056, 116.820633, -186.754868, -0.981703579, 1.53577525e-06, -0.190415546, 1.56365259e-05, 1, -7.25500504e-05, 0.190415546, -7.42000775e-05, -0.981703579)
+			Char:FindFirstChild("Head").Anchored = true
+			Char:FindFirstChild("UpperTorso").Anchored = true
+			Char:FindFirstChild("UpperTorso").Anchored = true
 		else
-			game:GetService("Players").LocalPlayer.Character.Animate.Disabled = false
-			char:FindFirstChild("Head").Anchored = false
-			char:FindFirstChild("UpperTorso").Anchored = false
-			char:FindFirstChild("UpperTorso").Anchored = false
+			Anim.Disabled = false
+			Char:FindFirstChild("Head").Anchored = false
+			Char:FindFirstChild("UpperTorso").Anchored = false
+			Char:FindFirstChild("UpperTorso").Anchored = false
 		end
 	end
 })

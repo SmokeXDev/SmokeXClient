@@ -1,3 +1,5 @@
+repeat task.wait() until game:IsLoaded()
+
 if not shared.VapeExecuted then
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))()
 else end
@@ -17,6 +19,31 @@ local uis = game:GetService("UserInputService")
 local localmouse = lplr:GetMouse()
 local requestfunc = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or getgenv().request or request
 local getasset = getsynasset or getcustomasset
+
+--Variables
+local Players = game:GetService("Players")
+local Anim = Players.LocalPlayer.Character.Animate
+local Mouse = Players.LocalPlayer:GetMouse()
+local Lighting = game:GetService("Lighting")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Char = Players.LocalPlayer.Character
+local Hum = Char.Humanoid
+local HumRootPart = Char:WaitForChild("HumanoidRootPart")
+local TextChatService = game:GetService("TextChatService")
+local StarterGui = game:GetService("StarterGui")
+local SkyScytheSpinRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SkyScytheSpin")
+local plr = Players.LocalPlayer
+
+--Features Variables
+local NightVar = false
+local ErrorTimeVar = false
+local BuyingVar = false
+local SkyScytheVar = false
+local AnnoyingVar = false
+local AutoGuitarVar = false
+local ScytheFlyDisablerVar = false
+local ScytheSpeedVar = false
+local AutoTrumpetVar = false
 
 local RenderStepTable = {}
 local StepTable = {}
@@ -47,7 +74,7 @@ local function UnbindFromStepped(name)
 	end
 end
 
-local function infonotify(title, text, delay)
+local function notify(title, text, delay)
 	pcall(function()
 		local frame = GuiLibrary["CreateNotification"](title, text, delay, "assets/InfoNotification.png")
 		frame.Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
@@ -195,7 +222,7 @@ local function findTouchInterest(tool)
 	return nil
 end
 
-infonotify("Smoke", "Loaded Successfully!", 5)
+notify("Smoke", "Loaded Successfully!", 5)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/Detector.lua", true))()
 
 GuiLibrary.RemoveObject("XrayOptionsButton")
@@ -206,74 +233,68 @@ runcode(function()
 		["Name"] = "NoAnim",
 		["Function"] = function(callback)
 			if callback then
-				game.Players.LocalPlayer.Character.Animate.Disabled = true
+				Anim.Disabled = true
 			else
-				game.Players.LocalPlayer.Character.Animate.Disabled = false
+				Anim.Disabled = false
 			end
 		end
 	})
 end)
 
 runcode(function()
-	local MassReportChat = {Enabled = false}
-	local AutoChatVal = false
 	local MassReport = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
 		["Name"] = "MassReport",
 		["Function"] = function()
-			infonotify("MassReport", "Enabled", 5)
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/MassReport.lua", true))()
 		end,
-		["HoverText"] = "Can't be reversed"
+		["HoverText"] = "If you enable the MassReport you will not be able to disable it!"
 	})
 end)
 
 runcode(function()
-	local mouse = game:GetService("Players").LocalPlayer:GetMouse()
 	local Crosshair = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		["Name"] = "Crosshair",
 		["Function"] = function(callback)
 			if callback then
-				mouse.Icon = "rbxassetid://9943168532"
+				Mouse.Icon = "rbxassetid://9943168532"
 			else
-				mouse.Icon = ""
+				Mouse.Icon = ""
 			end
 		end
 	})
 end)
 
 runcode(function()
-	local NightVal = false
 	local Night = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		["Name"] = "Night",
 		["Function"] = function(callback)
 			if callback then
-					NightVal = true
-					while NightVal and task.wait(0.3) do
-						game:GetService("Lighting").TimeOfDay = "00:00:00"
-					end
-				else
-					NightVal = false
-					wait(0.3)
-				game:GetService("Lighting").TimeOfDay = "13:00:00"
+				NightVar = true
+				while NightVar and task.wait(.3) do
+					Lighting.TimeOfDay = "00:00:00"
+				end
+			else
+				NightVar = false
+				wait(.3)
+				Lighting.TimeOfDay = "13:00:00"
 			end
 		end
 	})
 end)
 
 runcode(function()
-	local ErrorTimeVal = false
 	local ErrorTime = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		["Name"] = "ErrorTime",
 		["Function"] = function(callback)
 			if callback then
-				ErrorTimeVal = true
-				while ErrorTimeVal and task.wait(0.1) do
+				ErrorTimeVar = true
+				while ErrorTimeVar and task.wait(.1) do
 					game.Lighting.ClockTime = 1
-						wait(0.1)
+					wait(.1)
 					game.Lighting.ClockTime = 13
 				end
 			else
-				ErrorTimeVal = false
+				ErrorTimeVar = false
 			end
 		end
 	})
@@ -288,14 +309,14 @@ runcode(function()
 				if succ then
 					-- disabled
 				elseif err then
-					infonotify('ChatDisabler', "Error has occured while trying to disable the chat", 5)
+					notify('ChatDisabler', "Error has occured while trying to disable the chat", 5)
 				end
 			else
 				local succ, err = pcall(function() game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true) end)
 				if succ then
 					-- restored
 				elseif err then
-					infonotify('ChatDisabler', "Error has occured while trying to enable the chat", 5)
+					notify('ChatDisabler', "Error has occured while trying to enable the chat", 5)
 				end
 			end
 		end
@@ -312,7 +333,7 @@ runcode(function()
 			if callback then
 				EnabledSpamV2 = true
 				while EnabledSpamV2 and task.wait(DelaySpamV2) do
-					game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync(SpamVal[math.random(1, #SpamVal)])
+					TextChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync(SpamVal[math.random(1, #SpamVal)])
 				end
 			else
 				EnabledSpamV2 = false
@@ -335,30 +356,29 @@ runcode(function()
 end)
 
 runcode(function()
-	local RGBSkinVal = false
+	local RGBSkinVar = false
 	local RGBSkin = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		["Name"] = "RGBSkin",
 		["Function"] = function(callback)
 			if callback then
-				RGBSkinVal = true
-				while RGBSkinVal and task.wait() do
+				RGBSkinVar = true
+				while RGBSkinVar and task.wait() do
 					local player = game.Players.LocalPlayer
 					local character = player.Character or player.CharacterAdded:Wait()
-					for _,part in pairs(character:GetDescendants()) do
+					for _, part in pairs(character:GetDescendants()) do
 						if part:IsA("BasePart") then
 							part.Color = Color3.new(math.random(), math.random(), math.random())
 						end
 					end
 				end
 			else
-				RGBSkinVal = false
+				RGBSkinVar = false
 			end
 		end
 	})
 end)
 
 runcode(function()
-	local HumanoidRootPart = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
 	local AntiVoidPart
 	local AntiVoidV4 = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
 		["Name"] = "AntiVoidV4",
@@ -367,12 +387,12 @@ runcode(function()
 				AntiVoidPart = Instance.new("Part")
 				AntiVoidPart.Name = "AntiVoidV4"
 				AntiVoidPart.Size = Vector3.new(1000000, 2, 1000000)
-				AntiVoidPart.Position = HumanoidRootPart.Position - Vector3.new(0, 30, 0)
+				AntiVoidPart.Position = HumRootPart.Position - Vector3.new(0, 30, 0)
 				AntiVoidPart.Anchored = true
 				AntiVoidPart.CanCollide = false
 				AntiVoidPart.Transparency = 1
 				AntiVoidPart.Parent = workspace
-				AntiVoidPart.Touched:Connect(function(hit) game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0, 150, 0) end)
+				AntiVoidPart.Touched:Connect(function(hit) HumRootPart.Velocity = Vector3.new(0, 150, 0) end)
 			else
 				if AntiVoidPart then
 					AntiVoidPart:Destroy()
@@ -382,20 +402,17 @@ runcode(function()
 	})
 end)
 
-
 runcode(function()
-	local Char = game.Players.LocalPlayer.Character
 	local AFKFarm = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
 		["Name"] = "AFKFarm",
 		["Function"] = function(callback)
 			if callback then
-				infonotify("AFKFarm", "Enabled", 5)
-				Char.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 50000, 0)
+				notify("AFKFarm", "Enabled", 5)
+				Char.HumanoidRootPart.CFrame = HumRootPart.CFrame + Vector3.new(0, 50000, 0)
 				Char.Head.Anchored = true
 				Char.UpperTorso.Anchored = true
 				Char.UpperTorso.Anchored = true
 			else
-				infonotify("AFKFarm", "Disabled!", 5)
 				Char.Head.Anchored = false
 				Char.UpperTorso.Anchored = false
 				Char.UpperTorso.Anchored = false
@@ -405,52 +422,50 @@ runcode(function()
 end)
 
 runcode(function()
-	local BuyingVal = false
 	local AutoWool = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		["Name"] = "AutoWool",
 		["Function"] = function(callback)
 			if callback then
-				infonotify("AutoWool", "Enabled", 5)
-				BuyingVal = true
-				while BuyingVal and task.wait() do
-				local args = {
-				[1] = {
-					["shopItem"] = {
-						["currency"] = "iron",
-						["itemType"] = "wool_white",
-						["amount"] = 16,
-						["price"] = 8,
-						["category"] = "Blocks"
-				}}}
-				game:GetService("ReplicatedStorage").rbxts_include.node_modules["@rbxts"].net.out._NetManaged.BedwarsPurchaseItem:InvokeServer(unpack(args))
-			end
-		else
-			BuyingVal = false
-				infonotify("AutoWool", "Disabled", 5)
+				BuyingVar = true
+				while BuyingVar and task.wait() do
+					local args = {
+						[1] = {
+							["shopItem"] = {
+								["currency"] = "iron",
+								["itemType"] = "wool_white",
+								["amount"] = 16,
+								["price"] = 8,
+								["category"] = "Blocks"
+							}
+						}
+					}
+					ReplicatedStorage.rbxts_include.node_modules["@rbxts"].net.out._NetManaged.BedwarsPurchaseItem:InvokeServer(unpack(args))
+				end
+			else
+				BuyingVar = false
 			end
 		end
 	})
 end)
 
 runcode(function()
-	local SkyScytheVal = false
 	local SkyScytheExploit = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
 		["Name"] = "SkyScytheExploit",
 		["Function"] = function(callback)
 			if callback then
 				local success, err = pcall(function()
-					game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SkyScytheSpin"):FireServer()
+					SkyScytheSpinRemote:FireServer()
 				end)
 				if success then
-					SkyScytheVal = true
-					while SkyScytheVal and task.wait() do
-						game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SkyScytheSpin"):FireServer()
+					SkyScytheVar = true
+					while SkyScytheVar and task.wait() do
+						SkyScytheSpinRemote:FireServer()
 					end
 				else
 					warnnotify("SkyScytheExploit", "Item not found 'sky_scythe'")
 				end
 			elseif not callback then
-				SkyScytheVal = false
+				SkyScytheVar = false
 			end
 		end
 	})
@@ -505,109 +520,101 @@ runcode(function()
 end)
 
 runcode(function()
-	local AnnoyingVal = false
 	local AnnoyingSoundAura = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
 		["Name"] = "AnnoyingSoundAura",
 		["Function"] = function(callback)
 			if callback then
 				local success, err = pcall(function()
-					game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync(" ")
+					TextChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync(" ")
 				end)
 				if success then
-					AnnoyingVal = true
-					game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Chat, false)
-					while AnnoyingVal and task.wait() do
-						game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync(" ")
+					AnnoyingVar = true
+					StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, false)
+					while AnnoyingVar and task.wait() do
+						TextChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync(" ")
 					end
 				else
 					warnnotify("AnnoyingSoundAura", "Chat is not found!")
 				end
 			elseif not callback then
-				AnnoyingVal = false
-				game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true)
+				AnnoyingVar = false
+				StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true)
 			end
 		end
 	})
 end)
 
-local ScytheFlyDisablerVal = false
 runcode(function()
-    local ScytheFlyDisabler = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
-        ["Name"] = "ScytheFlyDisabler",
+    local ScytheDisabler = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+        ["Name"] = "ScytheDisabler",
         ["Function"] = function(callback)
             if callback then
-                ScytheFlyDisablerVal = true
-                while ScytheFlyDisablerVal do
-                    game:GetService("ReplicatedStorage").rbxts_include.node_modules["@rbxts"].net.out["_NetManaged"].ScytheDash:FireServer({ direction = Vector3.new(9e9, 9e9, 9e9) })
+                ScytheFlyDisablerVar = true
+                while ScytheFlyDisablerVar do
+                    ReplicatedStorage.rbxts_include.node_modules["@rbxts"].net.out["_NetManaged"].ScytheDash:FireServer({ direction = Vector3.new(9e9, 9e9, 9e9) })
                     task.wait()
                 end
             else
-                ScytheFlyDisablerVal = false
-                if not ScytheFlyDisablerVal then
-                    infonotify("ScytheFlyDisabler", "Disabled!", 5)
-                end
+                ScytheFlyDisablerVar = false
+                if not ScytheFlyDisablerVar then end
             end
         end,
-        ["HoverText"] = "Need a Scythe equipped to enable Inf Fly with normal Fly"
+        ["HoverText"] = "Basically a inf fly but better. needs a Scythe equipped"
     })
 end)
 
 runcode(function()
-	local plr = game.Players.LocalPlayer
-	local AutoGuitarVal = false
 	local AutoGuitar = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		["Name"] = "AutoGuitar",
 		["Function"] = function(callback)
 			if callback then
-				AutoGuitarVal = true
-				while AutoGuitarVal and task.wait() do
-					game:GetService("ReplicatedStorage").rbxts_include.node_modules:FindFirstChild("@rbxts").net.out._NetManaged.PlayGlitchGuitar:FireServer({["targets"] = {}})
+				AutoGuitarVar = true
+				while AutoGuitarVar and task.wait() do
+					ReplicatedStorage.rbxts_include.node_modules:FindFirstChild("@rbxts").net.out._NetManaged.PlayGlitchGuitar:FireServer({["targets"] = {}})
 				end
 			else
-				AutoGuitarVal = false
+				AutoGuitarVar = false
 			end
 		end
 	})
 end)
 
 runcode(function()
-    local ScytheSpeedVal = false
     local ScytheSpeed = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
         ["Name"] = "ScytheSpeed",
-		["HoverText"] = "Need ScytheFlyDisabler enabled",
+		["HoverText"] = "A bit faster than normal speed. Needs ScytheFlyDisabler enabled",
         ["Function"] = function(callback)
             if callback then
-                local success, err = pcall(function() game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 20 end)
+                local success, err = pcall(function() Hum.WalkSpeed = 20 end)
                 if success and ScytheFlyDisablerVal == true then
-                    ScytheSpeedVal = true
-                    while ScytheSpeedVal do
-                        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 20
+                    ScytheSpeedVar = true
+                    while ScytheSpeedVar do
+                        Hum.WalkSpeed = 20
                     end
                 end
             else
-                ScytheSpeedVal = false
-                infonotify("ScytheSpeed", "Waiting 1s to not flag", 1)
-				game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 17
+                ScytheSpeedVar = false
+                notify("ScytheSpeed", "Waiting 1s to not flag", 1)
+				Hum.WalkSpeed = 17
             end
         end
     })
 end)
 
 runcode(function()
-	local AutoTrumpetVal = false
 	local AutoTrumpet = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		["Name"] = "AutoTrumpet",
 		["Function"] = function(callback)
 			if callback then
-				local success, err = pcall(function() game:GetService("ReplicatedStorage"):FindFirstChild("events-@easy-games/game-core:shared/game-core-networking@getEvents.Events").useAbility:FireServer("TRUMPET_PLAY") end)
+				local success, err = pcall(function() ReplicatedStorage:FindFirstChild("events-@easy-games/game-core:shared/game-core-networking@getEvents.Events").useAbility:FireServer("TRUMPET_PLAY") end)
 				if success then
-					AutoTrumpetVal = true
-					while AutoTrumpetVal and task.wait() do
-						game:GetService("ReplicatedStorage"):FindFirstChild("events-@easy-games/game-core:shared/game-core-networking@getEvents.Events").useAbility:FireServer("TRUMPET_PLAY")
+					AutoTrumpetVar = true
+					while AutoTrumpetVar and task.wait() do
+						ReplicatedStorage:FindFirstChild("events-@easy-games/game-core:shared/game-core-networking@getEvents.Events").useAbility:FireServer("TRUMPET_PLAY")
 					end
 				end
 			else
-				AutoTrumpetVal = false
+				AutoTrumpetVar = false
 			end
 		end
 	})
@@ -616,13 +623,12 @@ end)
 runcode(function()
 	local Client = "Smxke"
 	local Version = "V15"
-	local plr = game.Players.LocalPlayer
 	local ToxicLeave = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		["Name"] = "ToxicLeave",
 		["Function"] = function(callback)
 			if callback then
 				game.Players.PlayerRemoving:Connect(function(plr)
-					game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync(plr.Name .. " has left in anger. It's just a game, and you get angry because you lost. Haha, I'm not hacking; Waa waa " .. plr.Name .. " I'm just using my skills. Issue resolved. | " .. Client .. " on top! - " .. Version)
+					TextChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync(plr.Name .. " has left in anger. It's just a game, and you get angry because you lost. Haha, I'm not hacking; Waa waa " .. plr.Name .. " I'm just using my skills. Issue resolved. | " .. Client .. " on top! - " .. Version)
 				end)
 			else
 				-- nothing here lol
@@ -636,11 +642,11 @@ runcode(function()
         ["Name"] = "ChatLose",
         ["Function"] = function(callback)
             if callback then
-                game.Players.LocalPlayer.Character.Humanoid.Died:Connect(function()
-                    game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync("Good job, you killed me.")
+                Hum.Died:Connect(function()
+                    TextChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync("Good job, you killed me.")
                 end)
             else
-                game.Players.LocalPlayer.Character.Humanoid.Died:Connect(function()
+                Hum.Died:Connect(function()
                     -- nothing
                 end)
             end
@@ -649,54 +655,29 @@ runcode(function()
 end)
 
 runcode(function()
-	local ScytheLongJump = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-		["Name"] = "ScytheLongJump",
-		["Function"] = function(callback)
-			if callback then
-				game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(1), {Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * 80}):Play()
-				GuiLibrary.ObjectsThatCanBeSaved.ScytheLongSpeedOptionsButton.Api.ToggleButton(false)
-				wait(0.3)
-				infonotify("ScytheLongSpeed", "Jump in 1s to not flag")
-			end
-		end
-	})
-end)
-
-runcode(function()
-	local QueueRegionDisplayRemover = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
-		["Name"] = "QueueRegionDisplayRemover",
-		["Function"] = function(callback)
-			if callback then
-				game:GetService("Players").LocalPlayer.PlayerGui.QueueRegionDisplay:Destroy()
-			end
-		end
-	})
-end)
-
-runcode(function()
 	local SpeedV2Mode = {Value = nil}
 	local SpeedVal = {Value = 23}
 	local HeatSeekerLoop = false
 	local SpeedV2 = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		["Name"] = "SpeedV2",
-		["HoverText"] = "Beta",
+		["HoverText"] = "In beta",
 		["Function"] = function()
 			if SpeedV2Mode.Value == "Normal" then
 				HeatSeekerLoop = false
-				game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = SpeedVal
+				Hum.WalkSpeed = SpeedVal
 			elseif SpeedV2Mode.Value == "ScytheHeatSeeker" then
 				HeatSeekerLoop = true
-				infonotify("SpeedV2", "Wait 0.5s for no lagback.", 1)
+				notify("SpeedV2", "Wait 0.5s for no lagback.", 1)
 				while HeatSeekerLoop do
 					for speed = 16, 35 do
-						game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speed
-						task.wait(0.8)
+						Hum.WalkSpeed = speed
+						task.wait(.8)
 					end
 				end
 			elseif SpeedV2Mode.Value == "ResetSpeed" then
 				HeatSeekerLoop = false
 				wait(1)
-				game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 18
+				Hum.WalkSpeed = 18
 			end
 		end
 	})

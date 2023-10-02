@@ -1,3 +1,5 @@
+repeat task.wait() until game:IsLoaded()
+
 if not shared.VapeExecuted then
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))()
 else end
@@ -47,7 +49,7 @@ local function UnbindFromStepped(name)
 	end
 end
 
-local function infonotify(title, text, delay)
+local function notify(title, text, delay)
 	pcall(function()
 		local frame = GuiLibrary["CreateNotification"](title, text, delay, "assets/InfoNotification.png")
 		frame.Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
@@ -195,11 +197,9 @@ local function findTouchInterest(tool)
 	return nil
 end
 
-infonotify("Smoke", "Loaded Successfully!", 5)
+notify("Smoke", "Loaded Successfully!", 5)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/Detector.lua", true))()
 
-GuiLibrary.RemoveObject("TargetStrafeOptionsButton")
-GuiLibrary.RemoveObject("ArrowsOptionsButton")
 GuiLibrary.RemoveObject("HealthOptionsButton")
 GuiLibrary.RemoveObject("SearchOptionsButton")
 GuiLibrary.RemoveObject("XrayOptionsButton")
@@ -264,14 +264,14 @@ runcode(function()
 				if succ then
 					-- disabled
 				elseif err then
-					infonotify('ChatDisabler', "Error has occured while trying to disable the chat", 5)
+					notify('ChatDisabler', "Error has occured while trying to disable the chat", 5)
 				end
 			else
 				local succ, err = pcall(function() game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true) end)
 				if succ then
 					-- restored
 				elseif err then
-					infonotify('ChatDisabler', "Error has occured while trying to enable the chat", 5)
+					notify('ChatDisabler', "Error has occured while trying to enable the chat", 5)
 				end
 			end
 		end

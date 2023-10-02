@@ -1,7 +1,15 @@
 local whitelisted = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeUsers/main/Whitelist.json"))
 local Players = game:GetService("Players")
-local lplrname = game.Players.LocalPlayer.Name
 
+--Notification
+local function robloxnotify(title, message, delay, Callback)
+    StarterGui:SetCore("SendNotification", {
+        ["Title"] = title,
+        ["Text"] = message,
+        ["Duration"] = delay,
+        ["Callback"] = Callback
+    })
+end
 local function notify(title, message, delay)
     local notification = Instance.new("ScreenGui")
     notification.Name = "Notification"
@@ -41,7 +49,7 @@ local function notify(title, message, delay)
     textLabel.Text = message
     textLabel.Parent = frame
 
-    notification.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    notification.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
     wait(delay or 5)
     notification:Destroy()
 end
@@ -61,8 +69,9 @@ for playerName, tagInfo in pairs(whitelisted) do
                 end
             end
         end
-        local textChatService = game:GetService("TextChatService")
-        textChatService.OnIncomingMessage = function(message, chatStyle)
+        if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
+            local textChatService = game:GetService("TextChatService")
+            textChatService.OnIncomingMessage = function(message, chatStyle)
             local properties = Instance.new("TextChatMessageProperties")
             local player = game:GetService("Players"):GetPlayerByUserId(message.TextSource.UserId)
             if player then
@@ -75,30 +84,30 @@ for playerName, tagInfo in pairs(whitelisted) do
             end
             return properties
         end
+        elseif game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.LegacyChatService then end
     end
 end
 
 Players.PlayerAdded:Connect(function(player)
     local playerName = player.Name
     local tagInfo = whitelisted[playerName]
-    if tagInfo and playerName ~= lplrname then
+    if tagInfo and playerName ~= Players.LocalPlayer.Name then
         notify("Smoke Team", playerName .. " is a " .. tagInfo.nametag .. " (" .. tagInfo.nametag2 .. ").", 8)
     end
 end)
 
-local tagInfo = whitelisted[lplrname]
+local tagInfo = whitelisted[Players.LocalPlayer.Name]
 if tagInfo then
     notify("Smoke Private", "You are a Smoke Private (" .. tagInfo.nametag .. ") (" .. tagInfo.nametag2 .. ").", 3)
 end
 
-local PlrName = game.Players.LocalPlayer.Name
-local tagInfo = whitelisted[lplrname]
+local tagInfo = whitelisted[Players.LocalPlayer.Name]
 if not tagInfo then
     local textChatService = game:GetService("TextChatService")
     textChatService.OnIncomingMessage = function(message)
         local properties = Instance.new("TextChatMessageProperties")
         local player = game:GetService("Players"):GetPlayerByUserId(message.TextSource.UserId)
-            if player and player.Name == PlrName then
+            if player and player.Name == Players.LocalPlayer.Name then
                 properties.PrefixText = "<font color='#FFF703'>[SMOKE USER]</font> " .. message.PrefixText
             end
         return properties
