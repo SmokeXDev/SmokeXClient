@@ -1,3 +1,5 @@
+repeat task.wait() until game:IsLoaded()
+
 loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/BlacklistLoader.lua", true))()
 local DiscordInvite = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Discord%20Inviter/Source.lua"))()
 DiscordInvite.Join("tzDKuCxKTE")
