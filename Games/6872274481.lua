@@ -4,8 +4,6 @@ if not shared.VapeExecuted then
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))()
 else end
 
-wait(0.5)
-
 -- Credits to Inf Yield & all the other scripts that helped me make bypasses
 local GuiLibrary = shared.GuiLibrary
 local players = game:GetService("Players")
@@ -622,13 +620,12 @@ end)
 
 runcode(function()
 	local Client = "Smxke"
-	local Version = "V15"
 	local ToxicLeave = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		["Name"] = "ToxicLeave",
 		["Function"] = function(callback)
 			if callback then
 				game.Players.PlayerRemoving:Connect(function(plr)
-					TextChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync(plr.Name .. " has left in anger. It's just a game, and you get angry because you lost. Haha, I'm not hacking; Waa waa " .. plr.Name .. " I'm just using my skills. Issue resolved. | " .. Client .. " on top! - " .. Version)
+					TextChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync(plr.Name .. " has left in anger. It's just a game, and you get angry because you lost. Haha, I'm not hacking; Waa waa " .. plr.Name .. " I'm just using my skills. Issue resolved. | " .. Client .. " on top!")
 				end)
 			else
 				-- nothing here lol
