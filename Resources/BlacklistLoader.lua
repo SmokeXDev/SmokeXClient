@@ -11,7 +11,7 @@ for playerName, kickInfo in pairs(blacklisted) do
         Players.LocalPlayer.Name = kickInfo.FakeName
         Players.LocalPlayer.DisplayName = kickInfo.FakeName
         wait(.5)
-        plr:Kick(kickInfo.Reason)
+        Players.LocalPlayer:Kick(kickInfo.Reason)
         while true and task.wait() do
             Teleport:Teleport(kickInfo.GameTP)
         end
