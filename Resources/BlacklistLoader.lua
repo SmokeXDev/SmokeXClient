@@ -7,13 +7,8 @@ local blacklisted = game:GetService("HttpService"):JSONDecode(BlacklistUsers)
 for playerName, kickInfo in pairs(blacklisted) do
     local blacklistedplr = Players:FindFirstChild(playerName)
     if blacklistedplr == Players.LocalPlayer then
-        setfpscap(1)
-        Players.LocalPlayer.Name = kickInfo.FakeName
-        Players.LocalPlayer.DisplayName = kickInfo.FakeName
-        wait(.5)
         Players.LocalPlayer:Kick(kickInfo.Reason)
-        while true and task.wait() do
-            Teleport:Teleport(kickInfo.GameTP)
-        end
+        setfpscap(1)
+        Teleport:Teleport(kickInfo.GameTP)
     end
 end
