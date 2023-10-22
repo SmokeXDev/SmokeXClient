@@ -15,9 +15,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Char = Players.LocalPlayer.Character
 local Hum = Char.Humanoid
 local HumRootPart = Char:WaitForChild("HumanoidRootPart")
-local GenBoost = ReplicatedStorage.Remotes.generateBoost
-local SellRemote = ReplicatedStorage.Remotes.sellBricks
-local RankUP = ReplicatedStorage.Remotes.rankUp
+local HitRemote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Hit")
+local RebirthRemote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Rebirth")
+local LocalPlayer = Players.LocalPlayer
+local DamagePartsFolder = workspace.Interactives
 
 --Notifications
 local function notify(title)
@@ -41,9 +42,23 @@ local CFrameSpeed = false
 local SlowAnimSpeed = false
 local JumpPower = {Value = 50}
 local ChillUIColor = Color3.new(0, 1, 0)
-local CoinsFarmVar = false
-local AutoSellVar = false
-local AutoRanksVar = false
+local InstaKillAuraVar = false
+
+--Lists
+local DamageParts = {
+    "TopMesh3",
+    "TopMesh2",
+    "TopMesh1",
+    "MiddleMesh3",
+    "MiddleMesh2",
+    "MiddleMesh1",
+    "LowerMesh3",
+    "LowerMesh2",
+    "LowerMesh1",
+    "Water3",
+    "Water2",
+    "Water1"
+}
 
 --Tabs
 local Tabs = {
@@ -78,19 +93,6 @@ notify("Smoke Loaded Successfully!")
 loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/Detector.lua", true))()
 
 --Feautres
-Utility:AddToggle("NoAnim", {
-    ["Text"] = "NoAnim",
-    ["Default"] = false,
-    ["Tooltip"] = "Removes your roblox anim",
-    ["Callback"] = function(callback)
-        if callback then
-            Anim.Disabled = true
-        else
-            Anim.Disabled = false
-        end
-    end
-})
-
 local MassReport = Blatant:AddButton({
     ["Text"] = "MassReport",
     ["Func"] = function()
@@ -436,51 +438,72 @@ ThemeManager:ApplyToTab(Tabs.ConfigTab)
 SaveManager:LoadAutoloadConfig()
 
 --Game Features
-Combat:AddToggle("CoinsFarm", {
-	["Text"] = "CoinsFarm",
-	["Default"] = false,
-	["Tooltip"] = "Farms coins for you",
-	["Callback"] = function(callback)
-		if callback then
-			CoinsFarmVar = true
-			while CoinsFarmVar and task.wait() do
-				GenBoost:FireServer("Coins", 0, 99999999)
-			end
-		else
-			CoinsFarmVar = false
-		end
-	end
+Blatant:AddToggle("InstaKillAura", {
+    ["Text"] = "InstaKillAura",
+    ["Default"] = false,
+    ["Tooltip"] = nil,
+    ["Callback"] = function(callback)
+        if callback then
+            InstaKillAuraVar = true
+            while InstaKillAuraVar and wait() do
+                for _, player in ipairs(Players:GetPlayers()) do
+                    if player ~= Players.LocalPlayer then
+                        HitRemote:FireServer(player)
+                    end
+                end
+            end
+        else
+            InstaKillAuraVar = false
+        end
+    end
 })
 
-Utility:AddToggle("AutoSell", {
-	["Text"] = "AutoSell",
-	["Default"] = false,
-	["Tooltip"] = nil,
-	["Callback"] = function(callback)
-		if callback then
-			AutoSellVar = true
-			while AutoSellVar and task.wait() do
-				SellRemote:FireServer()
-			end
-		else
-			AutoSellVar = false
-		end
-	end
+Utility:AddToggle("AutoRebirth", {
+    ["Text"] = "AutoRebirth",
+    ["Default"] = false,
+    ["Tooltip"] = nil,
+    ["Callback"] = function(callback)
+        if callback then
+            AutoRebirthVar = true
+            while AutoRebirthVar and wait() do
+                RebirthRemote:FireServer()
+            end
+        else
+            AutoRebirthVar = false
+        end
+    end
 })
 
-Blatant:AddToggle("AutoRanks", {
-	["Text"] = "AutoRanks",
-	["Default"] = false,
-	["Tooltip"] = "Farms ranks for you",
-	["Callback"] = function(callback)
-		if callback then
-			AutoRanksVar = true
-			while AutoRanksVar and task.wait() do
-				GenBoost:FireServer("Levels", 0, 15)
-				RankUP:FireServer()
-			end
-		else
-			AutoRanksVar = false
-		end
-	end
+Blatant:AddToggle("KillAll", {
+    ["Text"] = "KillAll",
+    ["Default"] = false,
+    ["Tooltip"] = nil,
+    ["Callback"] = function(callback)
+        if callback then
+            KillAllVar = true
+            while KillAllVar and task.wait(.2) do
+                local Playerss = Players:GetPlayers()
+                local RandomPlr = Playerss[math.random(1, #Playerss)]
+                if RandomPlr ~= LocalPlayer then
+                    LocalPlayer.Character:MoveTo(RandomPlr.Character.HumanoidRootPart.Position)
+                end
+            end
+        else
+            KillAllVar = false
+        end
+    end
+})
+
+local AntiKill = Blatant:AddButton({
+    ["Text"] = "AntiKill",
+    ["Func"] = function()
+        for _, blockName in ipairs(DamageParts) do
+            local block = DamagePartsFolder[blockName]
+            if block then
+                block:Destroy()
+            end
+        end
+    end,
+    ["DoubleClick"] = false,
+    ["Tooltip"] = nil,
 })

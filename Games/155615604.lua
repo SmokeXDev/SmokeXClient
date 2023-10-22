@@ -41,6 +41,7 @@ local SlowAnimSpeed = false
 local JumpPower = {Value = 50}
 local ChillUIColor = Color3.new(0, 1, 0)
 local KillAuraVar = false
+local SprintVar = false
 
 --Tabs
 local Tabs = {
@@ -117,12 +118,12 @@ Render:AddToggle("Night", {
     ["Callback"] = function(callback)
         if callback then
 			NightVar = true
-			while NightVar and task.wait(0.3) do
+			while NightVar and task.wait(.3) do
 				Lighting.TimeOfDay = "00:00:00"
 			end
 		else
 			NightVar = false
-			wait(0.3)
+			wait(.3)
 			Lighting.TimeOfDay = "13:00:00"
 		end
     end
@@ -135,9 +136,9 @@ Render:AddToggle("ErrorTime", {
     ["Callback"] = function(callback)
         if callback then
 			ErrorTimeVar = true
-			while ErrorTimeVar and task.wait(0.1) do
+			while ErrorTimeVar and task.wait(.1) do
 				Lighting.ClockTime = 1
-				wait(0.1)
+				wait(.1)
 				Lighting.ClockTime = 13
 			end
 		else
@@ -221,13 +222,13 @@ Utility:AddToggle("ChatSpammer", {
                 TextChatServiceSpam = true
                 while TextChatServiceSpam do
                     game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync(msg)
-                    wait(0.5)
+                    wait(.5)
                 end
             elseif game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.LegacyChatService then
                 LegacyChatServiceSpam = true
                 while LegacyChatServiceSpam do
                     ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(msg, "All")
-                    wait(0.5)
+                    wait(.5)
                 end
             end
         else
@@ -498,10 +499,13 @@ Utility:AddToggle("Sprint", {
 	["Tooltip"] = "Makes you always sprint",
 	["Callback"] = function(callback)
 		if callback then
-			Hum.WalkSpeed = 25
-		else
-			Hum.WalkSpeed = 16
-			SprintVar = false
-		end
+            SprintVar = true
+            while SprintVar and task.wait() do
+                Hum.WalkSpeed = 25
+            end
+        else
+            SprintVar = false
+            Hum.WalkSpeed = 16
+        end
 	end
 })
