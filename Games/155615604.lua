@@ -3,7 +3,6 @@ repeat task.wait() until game:IsLoaded()
 local GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/Library.lua"))()
 local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/addons/ThemeManager.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/addons/SaveManager.lua"))()
-local DiscordInvite = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Discord%20Inviter/Source.lua"))()
 local Smoke = GuiLibrary:CreateWindow({["Title"] = "Smoke Client", ["Center"] = true, ["AutoShow"] = true, ["TabPadding"] = 8, ["MenuFadeTime"] = 0.2})
 
 --Variables
@@ -49,8 +48,8 @@ local Tabs = {
     BlatantTab = Smoke:AddTab("Blatant"),
     UtilityTab = Smoke:AddTab("Utility"),
     RenderTab = Smoke:AddTab("Render"),
-    ConfigTab = Smoke:AddTab("Config"),
-	CreditsTab = Smoke:AddTab("Credits")
+    UniversalTab = Smoke:AddTab("Universal"),
+    ConfigTab = Smoke:AddTab("Config")
 }
 
 --Boxs
@@ -58,25 +57,15 @@ local Combat = Tabs.CombatTab:AddLeftGroupbox("Combat")
 local Blatant = Tabs.BlatantTab:AddLeftGroupbox("Blatant")
 local Utility = Tabs.UtilityTab:AddLeftGroupbox("Utility")
 local Render = Tabs.RenderTab:AddLeftGroupbox("Render")
+local Universal = Tabs.UniversalTab:AddLeftGroupbox("Universal")
 local Config = Tabs.ConfigTab:AddLeftGroupbox("Menu")
-local Credits = Tabs.CreditsTab:AddLeftGroupbox("Credits")
-
---Credits
-local Discord = Credits:AddButton({
-	["Text"] = "Discord",
-	["Func"] = function()
-		DiscordInvite.Join("tzDKuCxKTE")
-	end,
-	["DoubleClick"] = false,
-	["Tooltip"] = "Join Smoke Clients Discord Server"
-})
 
 --Loaded
 notify("Smoke Loaded Successfully!")
-loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/Detector.lua", true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/xysimdev/SmokeXClient/main/Resources/Detector.lua", true))()
 
 --Feautres
-Utility:AddToggle("NoAnim", {
+Universal:AddToggle("NoAnim", {
     ["Text"] = "NoAnim",
     ["Default"] = false,
     ["Tooltip"] = "Removes your roblox anim",
@@ -89,16 +78,7 @@ Utility:AddToggle("NoAnim", {
     end
 })
 
-local MassReport = Blatant:AddButton({
-    ["Text"] = "MassReport",
-    ["Func"] = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/MassReport.lua", true))()
-    end,
-    ["DoubleClick"] = false,
-    ["Tooltip"] = "If you enable the MassReport you will not be able to disable it!"
-})
-
-Render:AddToggle("Crosshair", {
+Universal:AddToggle("Crosshair", {
     ["Text"] = "Crosshair",
     ["Default"] = false,
     ["Tooltip"] = "Replaces your cursor with a different one",
@@ -111,7 +91,7 @@ Render:AddToggle("Crosshair", {
     end
 })
 
-Render:AddToggle("Night", {
+Universal:AddToggle("Night", {
     ["Text"] = "Night",
     ["Default"] = false,
     ["Tooltip"] = "Sets your time to night",
@@ -129,7 +109,7 @@ Render:AddToggle("Night", {
     end
 })
 
-Render:AddToggle("ErrorTime", {
+Universal:AddToggle("ErrorTime", {
     ["Text"] = "ErrorTime",
     ["Default"] = false,
     ["Tooltip"] = nil,
@@ -148,8 +128,8 @@ Render:AddToggle("ErrorTime", {
     end
 })
 
-Utility:AddDivider()
-Utility:AddSlider("Gravity", {
+Universal:AddDivider()
+Universal:AddSlider("Gravity", {
     ["Text"] = "Gravity",
     ["Default"] = 192.2,
     ["Min"] = 0,
@@ -160,7 +140,7 @@ Utility:AddSlider("Gravity", {
         GravitiyVal.Value = GravityFunc
     end
 })
-Utility:AddDropdown("GravityMode", {
+Universal:AddDropdown("GravityMode", {
     ["Values"] = {"Normal", "Velocity"},
     ["Default"] = "Normal",
     ["Multi"] = false,
@@ -186,9 +166,9 @@ Utility:AddDropdown("GravityMode", {
         end
     end
 })
-Utility:AddDivider()
+Universal:AddDivider()
 
-Render:AddToggle("ChatDisabler", {
+Universal:AddToggle("ChatDisabler", {
     ["Text"] = "ChatDisabler",
     ["Default"] = false,
     ["Tooltip"] = "Removes chat",
@@ -211,8 +191,8 @@ Render:AddToggle("ChatDisabler", {
     end
 })
 
-Utility:AddDivider()
-Utility:AddToggle("ChatSpammer", {
+Universal:AddDivider()
+Universal:AddToggle("ChatSpammer", {
     ["Text"] = "ChatSpammer",
     ["Default"] = false,
     ["Tooltip"] = nil,
@@ -237,7 +217,7 @@ Utility:AddToggle("ChatSpammer", {
         end
     end
 })
-Utility:AddInput("ChatSpammerMsg", {
+Universal:AddInput("ChatSpammerMsg", {
     ["Default"] = "Smxke on top",
     ["Numeric"] = false,
     ["Finished"] = false,
@@ -248,9 +228,9 @@ Utility:AddInput("ChatSpammerMsg", {
         msg = msgvalue
     end
 })
-Utility:AddDivider()
+Universal:AddDivider()
 
-Render:AddToggle("RGBSkin", {
+Universal:AddToggle("RGBSkin", {
     ["Text"] = "RGBSkin",
     ["Default"] = false,
     ["Tooltip"] = "Makes your character rainbow",
@@ -272,8 +252,8 @@ Render:AddToggle("RGBSkin", {
     end
 })
 
-Utility:AddDivider()
-Utility:AddSlider("Speed", {
+Universal:AddDivider()
+Universal:AddSlider("Speed", {
     ["Text"] = "Speed",
     ["Default"] = 16,
     ["Min"] = 1,
@@ -284,7 +264,7 @@ Utility:AddSlider("Speed", {
         SpeedValue.Value = SpeedFunc
     end
 })
-Utility:AddDropdown("SpeedMode", {
+Universal:AddDropdown("SpeedMode", {
     ["Values"] = {"Normal", "TPSpeed", "CFrame", "SlowAnim"},
     ["Default"] = "Normal",
     ["Multi"] = false,
@@ -350,10 +330,10 @@ Utility:AddDropdown("SpeedMode", {
         end
     end
 })
-Utility:AddDivider()
+Universal:AddDivider()
 
-Utility:AddDivider()
-Utility:AddSlider("HighJumpPower", {
+Universal:AddDivider()
+Universal:AddSlider("HighJumpPower", {
     ["Text"] = "HighJumpPower",
     ["Default"] = 50,
     ["Min"] = 10,
@@ -365,7 +345,7 @@ Utility:AddSlider("HighJumpPower", {
     end
 })
 
-Utility:AddLabel("Keybind"):AddKeyPicker("HighJump", {
+Universal:AddLabel("Keybind"):AddKeyPicker("HighJump", {
     ["Default"] = "T",
     ["SyncToggleState"] = false,
     ["Mode"] = "Toggle",
@@ -379,10 +359,10 @@ Utility:AddLabel("Keybind"):AddKeyPicker("HighJump", {
         end
     end
 })
-Utility:AddDivider()
+Universal:AddDivider()
 
-Render:AddDivider()
-Render:AddToggle("ChillUI", {
+Universal:AddDivider()
+Universal:AddToggle("ChillUI", {
     ["Text"] = "ChillUI",
     ["Default"] = false,
     ["Tooltip"] = "Changes your screen color",
@@ -406,7 +386,7 @@ Render:AddToggle("ChillUI", {
         end
     end
 })
-Render:AddLabel("ChillUIColor"):AddColorPicker("ChillUIColor", {
+Universal:AddLabel("ChillUIColor"):AddColorPicker("ChillUIColor", {
     ["Default"] = Color3.new(0, 1, 0),
     ["Title"] = "ChillUIColor",
     ["Transparency"] = 0.5,
@@ -418,7 +398,17 @@ Render:AddLabel("ChillUIColor"):AddColorPicker("ChillUIColor", {
         end
     end
 })
-Render:AddDivider()
+Universal:AddDivider()
+
+--Watermark
+GuiLibrary:SetWatermarkVisibility(true)
+local frameTimer, frameCounter, fps = tick(), 0, 60
+local watermarkConnection = game:GetService("RunService").RenderStepped:Connect(function()
+    frameCounter = frameCounter + 1
+    if tick() - frameTimer >= 1 then fps, frameTimer, frameCounter = frameCounter, tick(), 0 end
+    GuiLibrary:SetWatermark("Smoke Client | dsc.gg/smxke | " .. fps .. "fps")
+end)
+GuiLibrary:OnUnload(function() watermarkConnection:Disconnect() GuiLibrary.Unloaded = true end)
 
 --Config
 GuiLibrary.KeybindFrame.Visible = true;

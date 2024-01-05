@@ -3,7 +3,6 @@ repeat task.wait() until game:IsLoaded()
 local GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/Library.lua"))()
 local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/addons/ThemeManager.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/addons/SaveManager.lua"))()
-local DiscordInvite = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Discord%20Inviter/Source.lua"))()
 local Smoke = GuiLibrary:CreateWindow({["Title"] = "Smoke Client", ["Center"] = true, ["AutoShow"] = true, ["TabPadding"] = 8, ["MenuFadeTime"] = 0.2})
 
 --Variables
@@ -18,7 +17,9 @@ local HumRootPart = Char:WaitForChild("HumanoidRootPart")
 local HitRemote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Hit")
 local RebirthRemote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Rebirth")
 local LocalPlayer = Players.LocalPlayer
-local DamagePartsFolder = workspace.Interactives
+local InteractivesPartsFolder = workspace.Interactives
+local PlrKills = Players.LocalPlayer.GameStats.Kills.Value
+local WatermarkMsg = "| Smxke on top! dsc.gg/smxke"
 
 --Notifications
 local function notify(title)
@@ -28,36 +29,37 @@ end
 --Features Variables
 local NightVar = false
 local ErrorTimeVar = false
-local GravitiyVal = {Value = 1}
-local NormalGrav = false
-local VelocityGrav = false
 local TextChatServiceSpam = false
 local LegacyChatServiceSpam = false
 local msg = {""}
 local RGBSkinVar = false
-local SpeedValue = {Value = 1}
-local NormalSpeed = false
-local TPSpeed = false
-local CFrameSpeed = false
-local SlowAnimSpeed = false
 local JumpPower = {Value = 50}
 local ChillUIColor = Color3.new(0, 1, 0)
 local InstaKillAuraVar = false
+local AutoToxicVar = false
+local WaterMarkSpam = false
 
 --Lists
-local DamageParts = {
-    "TopMesh3",
-    "TopMesh2",
-    "TopMesh1",
-    "MiddleMesh3",
-    "MiddleMesh2",
-    "MiddleMesh1",
-    "LowerMesh3",
-    "LowerMesh2",
-    "LowerMesh1",
-    "Water3",
-    "Water2",
-    "Water1"
+local Messages = {
+    "L everyone, + %d kills for me.",
+    "Easy game, already %d kills.",
+    "How you died in a block game bro, you're so bad, maybe you don't have a gaming chair like mine got %d kills.",
+    "L TRASH KIDS + %d kills.",
+    "I never thought someone could be this bad but here we are lol, imagine not having + %d kills little man."
+}
+local GodModeParts = {
+    "Safezone",
+    "Safezone2",
+    "Safezone3",
+    "Safezone4"
+}
+local WaterMarkMsgs = {
+    "Bad? get better with dsc.gg/smxke",
+    "Bad? get better with .gg/tzDKuCxKTE",
+    "If you don't have skill like I do then just use the Smxke Client",
+    "Imagine losing because you don't have the Smxke Client",
+    "Smxke Client on top! dsc.gg/smxke",
+    "Smxke Client on top! .gg/tzDKuCxKTE"
 }
 
 --Tabs
@@ -66,8 +68,8 @@ local Tabs = {
     BlatantTab = Smoke:AddTab("Blatant"),
     UtilityTab = Smoke:AddTab("Utility"),
     RenderTab = Smoke:AddTab("Render"),
-    ConfigTab = Smoke:AddTab("Config"),
-	CreditsTab = Smoke:AddTab("Credits")
+    UniversalTab = Smoke:AddTab("Universal"),
+    ConfigTab = Smoke:AddTab("Config")
 }
 
 --Boxs
@@ -75,34 +77,15 @@ local Combat = Tabs.CombatTab:AddLeftGroupbox("Combat")
 local Blatant = Tabs.BlatantTab:AddLeftGroupbox("Blatant")
 local Utility = Tabs.UtilityTab:AddLeftGroupbox("Utility")
 local Render = Tabs.RenderTab:AddLeftGroupbox("Render")
+local Universal = Tabs.UniversalTab:AddLeftGroupbox("Universal")
 local Config = Tabs.ConfigTab:AddLeftGroupbox("Menu")
-local Credits = Tabs.CreditsTab:AddLeftGroupbox("Credits")
-
---Credits
-local Discord = Credits:AddButton({
-	["Text"] = "Discord",
-	["Func"] = function()
-		DiscordInvite.Join("tzDKuCxKTE")
-	end,
-	["DoubleClick"] = false,
-	["Tooltip"] = "Join Smoke Client Discord Server"
-})
 
 --Loaded
 notify("Smoke Loaded Successfully!")
-loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/Detector.lua", true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/xysimdev/SmokeXClient/main/Resources/Detector.lua", true))()
 
 --Feautres
-local MassReport = Blatant:AddButton({
-    ["Text"] = "MassReport",
-    ["Func"] = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/SmokeXDev/SmokeXClient/main/Resources/MassReport.lua", true))()
-    end,
-    ["DoubleClick"] = false,
-    ["Tooltip"] = "If you enable the MassReport you will not be able to disable it!"
-})
-
-Render:AddToggle("Crosshair", {
+Universal:AddToggle("Crosshair", {
     ["Text"] = "Crosshair",
     ["Default"] = false,
     ["Tooltip"] = "Replaces your cursor with a different one",
@@ -115,7 +98,7 @@ Render:AddToggle("Crosshair", {
     end
 })
 
-Render:AddToggle("Night", {
+Universal:AddToggle("Night", {
     ["Text"] = "Night",
     ["Default"] = false,
     ["Tooltip"] = "Sets your time to night",
@@ -133,7 +116,7 @@ Render:AddToggle("Night", {
     end
 })
 
-Render:AddToggle("ErrorTime", {
+Universal:AddToggle("ErrorTime", {
     ["Text"] = "ErrorTime",
     ["Default"] = false,
     ["Tooltip"] = nil,
@@ -152,47 +135,7 @@ Render:AddToggle("ErrorTime", {
     end
 })
 
-Utility:AddDivider()
-Utility:AddSlider("Gravity", {
-    ["Text"] = "Gravity",
-    ["Default"] = 192.2,
-    ["Min"] = 0,
-    ["Max"] = 192.2,
-    ["Rounding"] = 1,
-    ["Compact"] = false,
-    ["Callback"] = function(GravityFunc)
-        GravitiyVal.Value = GravityFunc
-    end
-})
-Utility:AddDropdown("GravityMode", {
-    ["Values"] = {"Normal", "Velocity"},
-    ["Default"] = "Normal",
-    ["Multi"] = false,
-    ["Text"] = "GravityMode",
-    ["Tooltip"] = nil,
-    ["Callback"] = function(Value)
-        if Value == "Normal" then
-            VelocityGrav = false
-			NormalGrav = true
-			while NormalGrav and task.wait() do
-				game.workspace.Gravity = GravitiyVal.Value
-			end
-        elseif Value == "Velocity" then
-            NormalGrav = false
-			VelocityGrav = true
-			game.workspace.Gravity = 192.2
-			while VelocityGrav and task.wait(.2) do
-				game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0, GravitiyVal.Value, 0)
-			end
-        else
-            NormalGrav = false
-            VelocityGrav = false
-        end
-    end
-})
-Utility:AddDivider()
-
-Render:AddToggle("ChatDisabler", {
+Universal:AddToggle("ChatDisabler", {
     ["Text"] = "ChatDisabler",
     ["Default"] = false,
     ["Tooltip"] = "Removes chat",
@@ -215,8 +158,8 @@ Render:AddToggle("ChatDisabler", {
     end
 })
 
-Utility:AddDivider()
-Utility:AddToggle("ChatSpammer", {
+Universal:AddDivider()
+Universal:AddToggle("ChatSpammer", {
     ["Text"] = "ChatSpammer",
     ["Default"] = false,
     ["Tooltip"] = nil,
@@ -241,7 +184,7 @@ Utility:AddToggle("ChatSpammer", {
         end
     end
 })
-Utility:AddInput("ChatSpammerMsg", {
+Universal:AddInput("ChatSpammerMsg", {
     ["Default"] = "Smxke on top",
     ["Numeric"] = false,
     ["Finished"] = false,
@@ -252,9 +195,9 @@ Utility:AddInput("ChatSpammerMsg", {
         msg = msgvalue
     end
 })
-Utility:AddDivider()
+Universal:AddDivider()
 
-Render:AddToggle("RGBSkin", {
+Universal:AddToggle("RGBSkin", {
     ["Text"] = "RGBSkin",
     ["Default"] = false,
     ["Tooltip"] = "Makes your character rainbow",
@@ -276,88 +219,8 @@ Render:AddToggle("RGBSkin", {
     end
 })
 
-Utility:AddDivider()
-Utility:AddSlider("Speed", {
-    ["Text"] = "Speed",
-    ["Default"] = 16,
-    ["Min"] = 1,
-    ["Max"] = 100,
-    ["Rounding"] = 1,
-    ["Compact"] = false,
-    ["Callback"] = function(SpeedFunc)
-        SpeedValue.Value = SpeedFunc
-    end
-})
-Utility:AddDropdown("SpeedMode", {
-    ["Values"] = {"Normal", "TPSpeed", "CFrame", "SlowAnim"},
-    ["Default"] = "Normal",
-    ["Multi"] = false,
-    ["Text"] = "SpeedMode",
-    ["Tooltip"] = "Select a speed mode",
-    ["Callback"] = function(Value)
-        if Value == "Normal" then
-            NormalSpeed = true
-            TPSpeed = false
-            CFrameSpeed = false
-            SlowAnimSpeed = false
-            while NormalSpeed and task.wait() do
-                Hum.WalkSpeed = SpeedValue.Value
-            end
-        elseif Value == "TPSpeed" then
-            Options.Speed:SetValue(5)
-            NormalSpeed = false
-            TPSpeed = true
-            CFrameSpeed = false
-            SlowAnimSpeed = false
-            while TPSpeed and task.wait(.5) do
-                HumRootPart.CFrame = HumRootPart.CFrame + HumRootPart.CFrame.lookVector * SpeedValue.Value
-            end
-        elseif Value == "CFrame" then
-            Options.Speed:SetValue(1)
-            NormalSpeed = false
-            TPSpeed = false
-            CFrameSpeed = true
-            SlowAnimSpeed = false
-            while CFrameSpeed and task.wait() do
-                HumRootPart.CFrame = HumRootPart.CFrame + HumRootPart.CFrame.lookVector * SpeedValue.Value
-            end
-        elseif Value == "SlowAnim" then
-            NormalSpeed = false
-            TPSpeed = false
-            CFrameSpeed = false
-            SlowAnimSpeed = true
-            local Anim = Instance.new("Animation")
-            Anim.AnimationId = "http://www.roblox.com/asset/?id=913402848"
-            local AnimationLoad = Hum:LoadAnimation(Anim)
-            AnimationLoad:Play()
-            local function AnimCheck()
-                if Hum:GetState() == Enum.HumanoidStateType.Running or Hum:GetState() == Enum.HumanoidStateType.Walking then
-                    if not AnimationLoad.IsPlaying then
-                        AnimationLoad:Play()
-                    end
-                else
-                    if AnimationLoad.IsPlaying then
-                        AnimationLoad:Stop()
-                    end
-                end
-            end
-            while SlowAnimSpeed and task.wait() do
-                Hum.WalkSpeed = SpeedValue.Value
-                AnimCheck()
-            end
-        else
-            Hum.WalkSpeed = 16
-            NormalSpeed = false
-            TPSpeed = false
-            CFrameSpeed = false
-            SlowAnimSpeed = false
-        end
-    end
-})
-Utility:AddDivider()
-
-Utility:AddDivider()
-Utility:AddSlider("HighJumpPower", {
+Universal:AddDivider()
+Universal:AddSlider("HighJumpPower", {
     ["Text"] = "HighJumpPower",
     ["Default"] = 50,
     ["Min"] = 10,
@@ -369,7 +232,7 @@ Utility:AddSlider("HighJumpPower", {
     end
 })
 
-Utility:AddLabel("Keybind"):AddKeyPicker("HighJump", {
+Universal:AddLabel("Keybind"):AddKeyPicker("HighJump", {
     ["Default"] = "T",
     ["SyncToggleState"] = false,
     ["Mode"] = "Toggle",
@@ -383,10 +246,10 @@ Utility:AddLabel("Keybind"):AddKeyPicker("HighJump", {
         end
     end
 })
-Utility:AddDivider()
+Universal:AddDivider()
 
-Render:AddDivider()
-Render:AddToggle("ChillUI", {
+Universal:AddDivider()
+Universal:AddToggle("ChillUI", {
     ["Text"] = "ChillUI",
     ["Default"] = false,
     ["Tooltip"] = "Changes your screen color",
@@ -410,7 +273,7 @@ Render:AddToggle("ChillUI", {
         end
     end
 })
-Render:AddLabel("ChillUIColor"):AddColorPicker("ChillUIColor", {
+Universal:AddLabel("ChillUIColor"):AddColorPicker("ChillUIColor", {
     ["Default"] = Color3.new(0, 1, 0),
     ["Title"] = "ChillUIColor",
     ["Transparency"] = 0.5,
@@ -422,7 +285,17 @@ Render:AddLabel("ChillUIColor"):AddColorPicker("ChillUIColor", {
         end
     end
 })
-Render:AddDivider()
+Universal:AddDivider()
+
+--Watermark
+GuiLibrary:SetWatermarkVisibility(true)
+local frameTimer, frameCounter, fps = tick(), 0, 60
+local watermarkConnection = game:GetService("RunService").RenderStepped:Connect(function()
+    frameCounter = frameCounter + 1
+    if tick() - frameTimer >= 1 then fps, frameTimer, frameCounter = frameCounter, tick(), 0 end
+    GuiLibrary:SetWatermark("Smoke Client | dsc.gg/smxke | " .. fps .. "fps")
+end)
+GuiLibrary:OnUnload(function() watermarkConnection:Disconnect() GuiLibrary.Unloaded = true end)
 
 --Config
 GuiLibrary.KeybindFrame.Visible = true;
@@ -438,10 +311,10 @@ ThemeManager:ApplyToTab(Tabs.ConfigTab)
 SaveManager:LoadAutoloadConfig()
 
 --Game Features
-Blatant:AddToggle("InstaKillAura", {
+Combat:AddToggle("InstaKillAura", {
     ["Text"] = "InstaKillAura",
     ["Default"] = false,
-    ["Tooltip"] = nil,
+    ["Tooltip"] = "Kills everyone around you",
     ["Callback"] = function(callback)
         if callback then
             InstaKillAuraVar = true
@@ -494,16 +367,104 @@ Blatant:AddToggle("KillAll", {
     end
 })
 
-local AntiKill = Blatant:AddButton({
-    ["Text"] = "AntiKill",
-    ["Func"] = function()
-        for _, blockName in ipairs(DamageParts) do
-            local block = DamagePartsFolder[blockName]
-            if block then
-                block:Destroy()
+Utility:AddToggle("JesusMode", {
+    ["Text"] = "JesusMode",
+    ["Default"] = false,
+    ["Tooltip"] = "Prevents you from dying from the water",
+    ["Callback"] = function(callback)
+        if callback then
+            InteractivesPartsFolder.TopMesh3.CanCollide = true
+            InteractivesPartsFolder.TopMesh2.CanCollide = true
+            InteractivesPartsFolder.TopMesh1.CanCollide = true
+        else
+            InteractivesPartsFolder.TopMesh3.CanCollide = false
+            InteractivesPartsFolder.TopMesh2.CanCollide = false
+            InteractivesPartsFolder.TopMesh1.CanCollide = false
+        end
+    end
+})
+
+Utility:AddToggle("AutoToxic", {
+    ["Text"] = "AutoToxic",
+    ["Default"] = false,
+    ["Tooltip"] = "Says somthing after every kill",
+    ["Callback"] = function(callback)
+        if callback then
+            AutoToxicVar = true
+            while AutoToxicVar and task.wait() do
+                local PlrKills2 = Players.LocalPlayer.GameStats.Kills.Value
+                if PlrKills2 ~= PlrKills then
+                    local Message2 = math.random(1, #Messages)
+                    local Message = Messages[Message2]:format(PlrKills2) .. " " .. WatermarkMsg
+                    game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync(Message)
+                    PlrKills = PlrKills2
+                end
+            end
+        else
+            AutoToxicVar = true
+        end
+    end
+})
+
+Utility:AddToggle("GodMode", {
+    ["Text"] = "GodMode",
+    ["Default"] = false,
+    ["Tooltip"] = "Cannot kill unless disabled!",
+    ["Callback"] = function(callback)
+        if callback then
+            for _, GodModePartsName in ipairs(GodModeParts) do
+                local GodModeParts2 = InteractivesPartsFolder[GodModePartsName]
+                if GodModeParts2 then
+                    GodModeParts2.Size = Vector3.new(9e9, 9e9, 9e9)
+                end
+            end
+        else
+            for _, GodModePartsName in ipairs(GodModeParts) do
+                local GodModeParts2 = InteractivesPartsFolder[GodModePartsName]
+                if GodModeParts2 then
+                    GodModeParts2.Size = Vector3.new(44, 18, 44)
+                end
             end
         end
+    end
+})
+
+local Speed = Utility:AddButton({
+    ["Text"] = "Speed",
+    ["Func"] = function()
+        notify("Your speed now is 40, if you die you will lose your speed.")
+        Hum.WalkSpeed = 40
     end,
     ["DoubleClick"] = false,
-    ["Tooltip"] = nil,
+    ["Tooltip"] = "Sets your speed to 40 untill killed"
+})
+
+Utility:AddSlider("Gravity", {
+    ["Text"] = "Gravity",
+    ["Default"] = 192.2,
+    ["Min"] = 0,
+    ["Max"] = 192.2,
+    ["Rounding"] = 1,
+    ["Compact"] = false,
+    ["Callback"] = function(GravityVal)
+        workspace.Gravity = GravityVal
+    end
+})
+
+Utility:AddToggle("WaterMarkChatSpam", {
+    ["Text"] = "WaterMarkChatSpam",
+    ["Default"] = false,
+    ["Tooltip"] = "Spams chat with Smoke advertisements",
+    ["Callback"] = function(callback)
+        if callback then
+            WaterMarkSpam = true
+            while WaterMarkSpam and task.wait(5) do
+                local Message2 = math.random(1, #WaterMarkMsgs)
+                local Message = WaterMarkMsgs[Message2]
+                game:GetService("TextChatService").ChatInputBarConfiguration.TargetTextChannel:SendAsync(Message)
+            end
+        else
+            WaterMarkSpam = false
+        end
+    end
 })
