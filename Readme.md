@@ -1,8 +1,8 @@
 # Smoke Client
 
 ```diff
-+ [Discord]: [Smoke Discord](https://discord.gg/tzDKuCxKTE)
-+ [Link]: https://discord.gg/tzDKuCxKTE
++ [Discord]: [Smoke Discord](https://discord.gg/yRcjYn5YPq)
++ [Link]: https://discord.gg/yRcjYn5YPq
 ```
 
 ```
