@@ -63,12 +63,6 @@ local WaterMarkMsgs = {
     "Smxke on top!",
     "dsc.gg/smxke"
 }
-local WaterParts = {
-    "TopMesh1",
-    "TopMesh2",
-    "TopMesh3",
-    "TopMesh4"
-}
 
 --Features
 GuiLibrary:AddToggle("Night", function(callback)
@@ -174,16 +168,14 @@ GuiLibrary:AddButton("NoWater", function()
     end
 end)
 
-GuiLibrary:AddToggle("JesusMode", function(callback)
-    if callback then
-        for _, NamePart in ipairs(WaterParts) do
-            local Part = InteractivesPartsFolder[NamePart]
-            if Part then
-                Part.CanCollide = true
-            end
+GuiLibrary:AddButton("JesusMode", function()
+    for _, blockName in ipairs(DamageParts) do
+        local block = InteractivesPartsFolder[blockName]
+        if block then
+            block.CanCollide = true
         end
     end
-end, false)
+end)
 
 GuiLibrary:AddToggle("AutoToxic", function(callback)
     if callback then
@@ -221,14 +213,10 @@ GuiLibrary:AddToggle("GodMode", function(callback)
 end, false)
 
 GuiLibrary:AddToggle("Speed", function(callback)
-    if callback then
-        SpeedVar = true
-        while SpeedVar and task.wait() do
-            Hum.WalkSpeed = 50
-        end
+    SpeedVar = callback
+    if SpeedVar == true then
+        Hum.WalkSpeed = 50
     else
-        SpeedVar = false
-        wait(.5)
         Hum.WalkSpeed = 16
     end
 end, false)
