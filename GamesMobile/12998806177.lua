@@ -24,32 +24,37 @@ local WatermarkMsg = "| Smxke on top!"
 local NightVar = false
 local TextChatServiceSpam = false
 local LegacyChatServiceSpam = false
-local msg = {"Smoke Client on top"}
+local msg = {"Smxke Client on top"}
 local InstaKillAuraVar = false
 local AutoToxicVar = false
 local WaterMarkSpam = false
+local SpeedVar = false
 
 --Lists
 local DamageParts = {
-    "TopMesh3",
-    "TopMesh2",
-    "TopMesh1",
-    "MiddleMesh3",
-    "MiddleMesh2",
-    "MiddleMesh1",
-    "LowerMesh3",
-    "LowerMesh2",
-    "LowerMesh1",
-    "Water3",
+    "Water1",
     "Water2",
-    "Water1"
+    "Water3",
+    "Water4",
+    "Water4.5",
+    "LowerMesh1",
+    "LowerMesh2",
+    "LowerMesh3",
+    "MiddleMesh1",
+    "MiddleMesh2",
+    "MiddleMesh3",
+    "TopMesh1",
+    "TopMesh2",
+    "TopMesh3",
+    "TopMesh4"
 }
 local Messages = {
-    "L everyone, + %d kills for me.",
-    "Easy game, already %d kills.",
-    "How you lost in a block game bro, maybe you don't have a gaming chair like mine got %d kills.",
-    "L TRASH KIDS + %d kills.",
-    "I never thought someone could be this bad but here we are lol, imagine not having + %d kills little man."
+    "LOL, No %d eliminations? Cry for them.",
+    "Easy game, already %d eliminations.",
+    "How did you lose in a block game, bro? You're so bad.",
+    "No gaming chair like mine has %d skills?",
+    "L TRASH KIDS + %d eliminations.",
+    "I never thought someone could be this bad but here we are. + %d skills for me."
 }
 local GodModeParts = {
     "Safezone",
@@ -58,10 +63,14 @@ local GodModeParts = {
     "Safezone4"
 }
 local WaterMarkMsgs = {
-    "Bad? get better with Smxke",
-    "If you don't have skill like I do then just use the Smxke Client",
-    "Imagine losing because you don't have the Smxke Client",
-    "Smxke Client on top!",
+    "Smxke on top!",
+    "dsc.gg/smxke"
+}
+local WaterParts = {
+    "TopMesh1",
+    "TopMesh2",
+    "TopMesh3",
+    "TopMesh4"
 }
 
 --Features
@@ -161,12 +170,23 @@ end, false)
 
 GuiLibrary:AddButton("NoWater", function()
     for _, blockName in ipairs(DamageParts) do
-        local block = DamagePartsFolder[blockName]
+        local block = InteractivesPartsFolder[blockName]
         if block then
             block:Destroy()
         end
     end
 end)
+
+GuiLibrary:AddToggle("JesusMode", function(callback)
+    if callback then
+        for _, NamePart in ipairs(WaterParts) do
+            local Part = InteractivesPartsFolder[NamePart]
+            if Part then
+                Part.CanCollide = true
+            end
+        end
+    end
+end, false)
 
 GuiLibrary:AddToggle("AutoToxic", function(callback)
     if callback then
@@ -203,9 +223,18 @@ GuiLibrary:AddToggle("GodMode", function(callback)
     end
 end, false)
 
-GuiLibrary:AddButton("Speed", function()
-    Hum.WalkSpeed = 40
-end)
+GuiLibrary:AddToggle("Speed", function(callback)
+    if callback then
+        SpeedVar = true
+        while SpeedVar and task.wait() do
+            Hum.WalkSpeed = 50
+        end
+    else
+        SpeedVar = false
+        wait(.5)
+        Hum.WalkSpeed = 16
+    end
+end, false)
 
 GuiLibrary:AddToggle("WaterMarkChatSpam", function(callback)
     if callback then
