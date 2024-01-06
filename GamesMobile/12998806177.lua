@@ -18,13 +18,13 @@ local RebirthRemote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Re
 local LocalPlayer = Players.LocalPlayer
 local InteractivesPartsFolder = workspace.Interactives
 local PlrKills = Players.LocalPlayer.GameStats.Kills.Value
-local WatermarkMsg = "| Smxke on top!"
+local WatermarkMsg = "| dsc.gg/smxke"
 
 --Features Variables
 local NightVar = false
 local TextChatServiceSpam = false
 local LegacyChatServiceSpam = false
-local msg = {"Smxke Client on top"}
+local msg = {"dsc.gg/smxke"}
 local InstaKillAuraVar = false
 local AutoToxicVar = false
 local WaterMarkSpam = false
