@@ -51,10 +51,7 @@ local DamageParts = {
 local Messages = {
     "LOL, No %d eliminations? Cry for them.",
     "Easy game, already %d eliminations.",
-    "How did you lose in a block game, bro? You're so bad.",
-    "No gaming chair like mine has %d skills?",
-    "L TRASH KIDS + %d eliminations.",
-    "I never thought someone could be this bad but here we are. + %d skills for me."
+    "No gaming chair like mine has %d skills?"
 }
 local GodModeParts = {
     "Safezone",
